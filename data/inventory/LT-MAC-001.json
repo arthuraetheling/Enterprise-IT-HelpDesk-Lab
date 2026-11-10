@@ -1,0 +1,18 @@
+{
+    "SchemaVersion":  1,
+    "Source":  "macos_health_check.sh",
+    "CollectedAt":  "2026-11-06T13:41:09Z",
+    "ComputerName":  "LT-MAC-001",
+    "SerialNumber":  "C02FV3K1MD6R",
+    "Manufacturer":  "Apple Inc.",
+    "Model":  "MacBook Air (M2)",
+    "OS":  {
+               "Name":  "macOS",
+               "DisplayVersion":  "15.6",
+               "Build":  "24G84"
+           },
+    "MemoryGB":  16,
+    "LoggedOnUser":  "priya.shah",
+    "MdmEnrolled":  true,
+    "FileVault":  "On"
+}

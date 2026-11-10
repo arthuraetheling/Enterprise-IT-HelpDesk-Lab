@@ -1,0 +1,13 @@
+name,sys_class_name,serial_number,asset_tag,manufacturer,model_number,os,os_version,ram,assigned_to,department,install_status,last_discovered
+DC01,cmdb_ci_win_server,VMware-56 4d 1a 2b 3c 4d 5e 6f-70 81 92 a3 b4 c5 d6 01,CF-SRV-001,"VMware, Inc.","VMware20,1",Windows Server 2022 Standard,21H2 (20348.2849),4096,,IT,Installed,2026-11-06 06:00:00
+MON01,cmdb_ci_linux_server,VMware-56 4d 1a 2b 3c 4d 5e 6f-70 81 92 a3 b4 c5 d6 02,CF-SRV-002,"VMware, Inc.","VMware20,1",Ubuntu,24.04.3 LTS,2048,,IT,Installed,2026-11-06 06:00:00
+LT-WIN-001,cmdb_ci_computer,VMware-56 4d 9a 3c 21 7e 0b 55-8f 10 2c 61 aa 03 4e 19,CF-LT-0001,"VMware, Inc.","VMware20,1",Windows 11 Enterprise,23H2 (22631.4317),8192,emma.carter,Finance,Installed,2026-11-05 22:10:00
+LT-WIN-002,cmdb_ci_computer,VMware-56 4d 77 10 c4 2e 9b 31-0a 6d 5f 82 13 e9 70 c2,CF-LT-0002,"VMware, Inc.","VMware20,1",Windows 11 Enterprise,25H2 (26200.7171),4096,marcus.reed,Sales,Installed,2026-11-05 21:40:00
+LT-WIN-004,cmdb_ci_computer,5CG3141K2D,CF-LT-0004,HP,EliteBook 840 G10,Windows 11 Enterprise,24H2 (26100.4349),16384,noah.patel,Finance,Installed,2026-09-12 08:15:00
+LT-WIN-005,cmdb_ci_computer,PF4BX2KQ,CF-LT-0005,LENOVO,ThinkPad T14 Gen 4,Windows 11 Enterprise,25H2 (26200.7171),16384,maya.singh,Sales,Installed,2026-11-04 17:05:00
+LT-WIN-005-OLD,cmdb_ci_computer,PF4BX2KQ,CF-LT-0005,LENOVO,ThinkPad T14 Gen 4,Windows 11 Enterprise,23H2 (22631.3880),16384,maya.singh,Sales,Installed,2026-05-20 09:00:00
+LT-WIN-006,cmdb_ci_computer,7XK2Q93,CF-LT-0006,Dell Inc.,Latitude 5440,Windows 11 Enterprise,24H2 (26100.4349),16384,,Operations,Retired,2026-08-30 12:00:00
+LT-WIN-008,cmdb_ci_computer,To be filled by O.E.M.,CF-LT-0008,LENOVO,ThinkPad E14,Windows 11 Enterprise,25H2 (26200.7171),16384,kwame.mensah,Operations,Installed,2026-11-03 14:20:00
+LT-MAC-001,cmdb_ci_computer,C02FV3K1MD6R,CF-MB-0001,Apple Inc.,MacBook Air (M2),macOS,15.6 (24G84),16384,priya.shah,HR,Installed,2026-11-05 18:30:00
+LT-MAC-002,cmdb_ci_computer,H4TX92KQ7P,CF-MB-0002,Apple Inc.,MacBook Pro 14 (M3),macOS,15.6 (24G84),18432,hana.suzuki,Sales,Installed,2026-11-05 19:05:00
+MB-IOS-001,cmdb_ci_comm,F17ZK3QW0D52,CF-MOB-0001,Apple Inc.,iPhone 15,iOS,18.6,,olivia.bennett,Finance,Installed,2026-11-06 07:45:00

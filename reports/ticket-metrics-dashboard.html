@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service Desk Metrics</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface-1: #fcfcfb; --hover-bg: #f1f0ec;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+  --gridline: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4; --series-6: #008300;
+  --on-fill: #ffffff; --on-fill-4: #0b0b0b;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+  --shadow: 0 6px 20px rgba(11,11,11,0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19; --hover-bg: #242423;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --gridline: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181; --series-6: #008300;
+    --on-fill-4: #ffffff; --shadow: 0 6px 20px rgba(0,0,0,0.45);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface-1: #1a1a19; --hover-bg: #242423;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
+  --gridline: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181; --series-6: #008300;
+  --on-fill-4: #ffffff; --shadow: 0 6px 20px rgba(0,0,0,0.45);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--text-primary); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 16px 48px; }
+.eyebrow { margin: 0; color: var(--text-secondary); font-size: 13px; }
+h1 { margin: 2px 0 4px; font-size: 24px; font-weight: 650; letter-spacing: -0.01em; }
+.sub { margin: 0; color: var(--text-secondary); font-size: 13px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 16px; }
+.filters button { font: inherit; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer; }
+.filters button:hover { background: var(--hover-bg); }
+.filters button[aria-pressed="true"] { font-weight: 650; border-color: var(--text-secondary); }
+.filters .check { width: 16px; height: 16px; display: none; }
+.filters button[aria-pressed="true"] .check { display: inline-block; }
+.top { display: grid; grid-template-columns: minmax(250px, 320px) minmax(0, 1fr); gap: 16px; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.hero-label { color: var(--text-secondary); font-size: 13px; }
+.hero-value { font-size: 56px; font-weight: 650; line-height: 1.05; margin: 10px 0 8px; letter-spacing: -0.02em; }
+.hero-sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 10px; }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.hero { display: flex; flex-direction: column; }
+.spark { margin-top: auto; padding-top: 14px; }
+.spark-line { stroke: var(--text-muted); }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.tile-label { color: var(--text-secondary); font-size: 13px; }
+.tile-value { font-size: 24px; font-weight: 600; margin: 2px 0 2px; }
+.tile-sub { color: var(--text-secondary); font-size: 12px; margin-bottom: 4px; }
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
+.st-good { fill: var(--good); } .st-crit { fill: var(--critical); } .st-serious { fill: var(--serious); } .st-warn { fill: var(--warning); }
+.st-glyph { stroke: #ffffff; stroke-width: 1.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.st-glyph.dark { stroke: #0b0b0b; } .st-dot { fill: #ffffff; } .st-dot.dark { fill: #0b0b0b; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.card.wide { grid-column: 1 / -1; }
+h2 { margin: 0; font-size: 15px; font-weight: 600; }
+.card-sub { margin: 2px 0 10px; color: var(--text-secondary); font-size: 13px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 4px 0 8px; font-size: 12px; color: var(--text-secondary); }
+.lg-item { display: inline-flex; align-items: center; gap: 6px; }
+.lg-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.lg-line { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+.chart { width: 100%; min-height: 40px; }
+.chart svg { display: block; overflow: visible; }
+svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+.tick { fill: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cat { fill: var(--text-secondary); font-size: 12px; }
+.val { fill: var(--text-primary); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.direct { fill: var(--text-secondary); font-size: 12px; }
+.gridline { stroke: var(--gridline); stroke-width: 1; shape-rendering: crispEdges; }
+.axis { stroke: var(--axis); stroke-width: 1; shape-rendering: crispEdges; }
+.series-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.dot { stroke: var(--surface-1); stroke-width: 2; }
+.crosshair { stroke: var(--axis); stroke-width: 1; }
+.target { stroke: var(--text-primary); stroke-width: 2; stroke-linecap: round; }
+.mark { outline: none; }
+.mark:hover .bar, .mark:focus .bar, .mark:hover .seg, .mark:focus .seg { filter: brightness(1.12); }
+.mark:focus-visible .bar, .mark:focus-visible .seg { stroke: var(--text-primary); stroke-width: 1.5; }
+.overlay:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+.seg-label { font-size: 12px; font-weight: 600; }
+details { margin-top: 10px; }
+summary { cursor: pointer; color: var(--text-secondary); font-size: 13px; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
+th { color: var(--text-secondary); font-weight: 600; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.insights { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+.insights li { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: start; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); padding-top: 1px; }
+.tooltip { position: fixed; z-index: 20; pointer-events: none; min-width: 150px; max-width: 280px; padding: 8px 10px; border-radius: 8px;
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); box-shadow: var(--shadow); font-size: 12px; }
+.tt-title { color: var(--text-secondary); margin-bottom: 4px; }
+.tt-row { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.tt-value { font-weight: 650; font-variant-numeric: tabular-nums; }
+.tt-label { color: var(--text-secondary); }
+.tt-key { display: inline-block; flex: none; }
+.tt-key.line { width: 12px; height: 2px; border-radius: 1px; }
+.tt-key.rect { width: 8px; height: 8px; border-radius: 2px; }
+footer { margin-top: 24px; color: var(--text-secondary); font-size: 12px; }
+footer dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; margin: 8px 0 0; }
+footer dt { font-weight: 600; }
+footer dd { margin: 0; }
+@media (max-width: 760px) {
+  .top, .grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-value { font-size: 48px; }
+  .insights li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+@media (max-width: 560px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  footer dl { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1>Service desk performance</h1>
+    <p class="sub" id="subtitle"></p>
+  </header>
+  <div class="filters" id="filters" role="group" aria-label="Date range"></div>
+  <section class="top">
+    <div class="card hero" id="hero"></div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+  <section class="grid">
+    <article class="card wide">
+      <h2>Weekly ticket volume</h2>
+      <p class="card-sub">Incidents and service requests opened per week (complete weeks in the selected range)</p>
+      <div class="legend" id="lg-weekly"></div>
+      <div class="chart" id="ch-weekly"></div>
+      <details><summary>Table view</summary><div class="table-scroll" id="tb-weekly"></div></details>
+    </article>
+    <article class="card">
+      <h2>Incidents by category</h2>
+      <p class="card-sub">Where the support demand comes from</p>
+      <div class="chart" id="ch-category"></div>
+      <details><summary>Table view</summary><div class="table-scroll" id="tb-category"></div></details>
+    </article>
+    <article class="card">
+      <h2>Resolution SLA by priority</h2>
+      <p class="card-sub">Share of resolved incidents within target; the tick on each bar marks its attainment target</p>
+      <div class="chart" id="ch-sla"></div>
+      <details><summary>Table view</summary><div class="table-scroll" id="tb-sla"></div></details>
+    </article>
+    <article class="card">
+      <h2>Open backlog by age</h2>
+      <p class="card-sub" id="sub-aging"></p>
+      <div class="chart" id="ch-aging"></div>
+      <details><summary>Table view</summary><div class="table-scroll" id="tb-aging"></div></details>
+    </article>
+    <article class="card">
+      <h2>How tickets arrive</h2>
+      <p class="card-sub">Contact channel, share of all tickets</p>
+      <div class="chart" id="ch-channel"></div>
+      <div class="legend" id="lg-channel"></div>
+      <h2 style="margin-top:18px">Incidents by platform</h2>
+      <p class="card-sub">Windows, Mac and mobile support mix</p>
+      <div class="chart" id="ch-platform"></div>
+      <div class="legend" id="lg-platform"></div>
+      <details><summary>Table view</summary><div class="table-scroll" id="tb-mix"></div></details>
+    </article>
+    <article class="card wide">
+      <h2>Recurring issues and problem candidates</h2>
+      <p class="card-sub">Review trigger: 3 or more incidents with the same symptom within 7 days. Problem candidate: 5 or more in 7 days at 3x the normal rate, which suggests a common root cause</p>
+      <div class="table-scroll" id="tb-recurring"></div>
+    </article>
+    <article class="card wide">
+      <h2>Insights and recommended actions</h2>
+      <ul class="insights" id="insights"></ul>
+    </article>
+    <article class="card wide">
+      <h2>Resolver group performance</h2>
+      <div class="table-scroll" id="tb-groups"></div>
+    </article>
+  </section>
+  <footer>
+    <div id="footnote"></div>
+    <dl>
+      <dt>Resolution SLA</dt><dd>Resolved within the priority target (P1 4 h, P2 8 h, P3 24 h, P4 72 h, P5 120 h), calendar hours, no pause states.</dd>
+      <dt>Response SLA</dt><dd>Acknowledged within P1 15 min, P2 30 min, P3 2 h, P4 8 h, P5 24 h.</dd>
+      <dt>First-contact resolution</dt><dd>Incident resolved by the Service Desk on the first contact without reassignment.</dd>
+      <dt>Problem candidate</dt><dd>Same symptom 5+ times within 7 days and at least 3x its normal weekly rate. Any symptom seen 3+ times in 7 days meets the review trigger.</dd>
+      <dt>Aged backlog</dt><dd>Open tickets older than 14 days, as of the end date (a snapshot that does not change with the range).</dd>
+    </dl>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" role="status" aria-live="polite" hidden></div>
+<script id="dashboard-data" type="application/json">{"meta": {"title": "Contoso Financial - IT Service Desk", "note": "Simulated data (generate_tickets.py, seed 42)", "source": "tickets.csv", "rows": 504, "asOf": "2026-11-06", "generatedAt": "2026-11-10 12:23"}, "targets": {"fcr": 70.0, "sla_p1p2": 95.0, "sla_other": 90.0, "sla_overall": 90.0, "response": 95.0, "reopen": 5.0, "reassign": 10.0, "aged": 5.0, "csat": 4.5, "kb": 60.0}, "windowOrder": ["30", "60", "90"], "defaultWindow": "90", "windows": {"30": {"label": "Last 30 days", "days": 30, "start": "2026-10-08", "end": "2026-11-06", "kpis": {"tickets": 194, "incidents": 160, "requests": 34, "resolvedIncidents": 149, "sla": 90.6, "response": 94.4, "fcr": 59.1, "reopen": 3.4, "reassign": 4.4, "kb": 53.0, "csat": 4.45, "csatN": 71, "mttrMedianH": 5.81, "mttrP90H": 50.44, "mttaMedianMin": 42.6, "backlog": 14, "aged": 4, "agedPct": 28.6}, "hero": {"label": "Resolution SLA attainment", "display": "90.6%", "sub": "135 of 149 resolved incidents met their priority target", "target": "Target \u2265 90%", "targetValue": 90.0, "ok": true}, "tiles": [{"label": "Tickets", "display": "194", "sub": "160 incidents, 34 requests", "ok": null}, {"label": "First-contact resolution", "display": "59.1%", "sub": "Target \u2265 70%", "ok": false}, {"label": "Median time to resolve", "display": "5.8 h", "sub": "P90 50 h", "ok": null}, {"label": "Response SLA", "display": "94.4%", "sub": "Target \u2265 95%", "ok": false}, {"label": "Reopen rate", "display": "3.4%", "sub": "Target \u2264 5%", "ok": true}, {"label": "Reassigned 2+ times", "display": "4.4%", "sub": "Target \u2264 10%", "ok": true}, {"label": "Aged backlog", "display": "4 of 14", "sub": "Open > 14 days (28.6%); target \u2264 5%", "ok": false}, {"label": "Customer satisfaction", "display": "4.5 / 5", "sub": "71 responses; target \u2265 4.5", "ok": false}, {"label": "KB link rate", "display": "53.0%", "sub": "Target \u2265 60%", "ok": false}], "weekly": [{"week": "2026-10-12", "incidents": 35, "requests": 8, "sla": 82.4}, {"week": "2026-10-19", "incidents": 36, "requests": 7, "sla": 85.7}, {"week": "2026-10-26", "incidents": 40, "requests": 9, "sla": 97.4}, {"week": "2026-11-02", "incidents": 33, "requests": 7, "sla": 96.3}], "byCategory": [{"name": "Network", "count": 42, "share": 26.2}, {"name": "Account & Access", "count": 40, "share": 25.0}, {"name": "Email & Collaboration", "count": 20, "share": 12.5}, {"name": "Hardware", "count": 19, "share": 11.9}, {"name": "Software", "count": 14, "share": 8.8}, {"name": "Mobile Device", "count": 12, "share": 7.5}, {"name": "Printing", "count": 7, "share": 4.4}, {"name": "Security", "count": 6, "share": 3.8}], "slaByPriority": [{"priority": "P1 Critical", "n": 1, "met": 1, "attainment": 100.0, "target": 95.0, "targetH": 4, "medianH": 3.42}, {"priority": "P2 High", "n": 7, "met": 6, "attainment": 85.7, "target": 95.0, "targetH": 8, "medianH": 1.53}, {"priority": "P3 Moderate", "n": 32, "met": 27, "attainment": 84.4, "target": 90.0, "targetH": 24, "medianH": 3.26}, {"priority": "P4 Low", "n": 69, "met": 64, "attainment": 92.8, "target": 90.0, "targetH": 72, "medianH": 5.64}, {"priority": "P5 Planning", "n": 40, "met": 37, "attainment": 92.5, "target": 90.0, "targetH": 120, "medianH": 11.09}], "aging": [{"bucket": "0-2 days", "count": 8}, {"bucket": "3-7 days", "count": 1}, {"bucket": "8-14 days", "count": 1}, {"bucket": "Over 14 days", "count": 4}], "channels": [{"name": "Phone", "slot": 0, "count": 53}, {"name": "Self-service portal", "slot": 1, "count": 60}, {"name": "Email", "slot": 2, "count": 46}, {"name": "Chat", "slot": 3, "count": 11}, {"name": "Walk-up", "slot": 4, "count": 15}, {"name": "Monitoring", "slot": 5, "count": 9}], "platforms": [{"name": "Windows", "slot": 0, "count": 138}, {"name": "macOS", "slot": 1, "count": 12}, {"name": "iOS", "slot": 2, "count": 7}, {"name": "Android", "slot": 3, "count": 2}, {"name": "Infrastructure", "slot": 4, "count": 1}], "groups": [{"name": "Contoso Service Desk", "count": 91, "resolved": 88, "medianH": 2.57, "sla": 100.0, "reassign": 0.0}, {"name": "Contoso Network Operations", "count": 30, "resolved": 27, "medianH": 22.59, "sla": 66.7, "reassign": 6.7}, {"name": "Contoso Desktop Support", "count": 28, "resolved": 23, "medianH": 17.22, "sla": 78.3, "reassign": 14.3}, {"name": "Contoso Identity & Access", "count": 11, "resolved": 11, "medianH": 14.93, "sla": 100.0, "reassign": 9.1}], "recurring": [{"issue": "Account locked again this week", "category": "Account & Access", "count": 13, "peak7": 10, "peakStart": "Oct 27", "users": 10, "first": "Oct 16", "last": "Nov 6", "spike": 11.0, "action": "Problem candidate: open a PRB"}, {"issue": "Outlook keeps prompting for password", "category": "Email & Collaboration", "count": 10, "peak7": 9, "peakStart": "Oct 15", "users": 10, "first": "Oct 15", "last": "Oct 27", "spike": 18.0, "action": "Problem candidate: open a PRB"}, {"issue": "VPN disconnects every 30 minutes", "category": "Network", "count": 15, "peak7": 8, "peakStart": "Oct 12", "users": 14, "first": "Oct 12", "last": "Oct 23", "spike": 3.8, "action": "Problem candidate: open a PRB"}, {"issue": "No network - 169.254 address", "category": "Network", "count": 9, "peak7": 7, "peakStart": "Nov 5", "users": 7, "first": "Oct 9", "last": "Nov 5", "spike": 11.5, "action": "Problem candidate: open a PRB"}, {"issue": "Print jobs stuck in queue", "category": "Printing", "count": 4, "peak7": 4, "peakStart": "Oct 20", "users": 4, "first": "Oct 20", "last": "Oct 23", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Wi-Fi drops in conference room 4B", "category": "Network", "count": 4, "peak7": 4, "peakStart": "Oct 23", "users": 4, "first": "Oct 23", "last": "Oct 26", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Password expired while travelling", "category": "Account & Access", "count": 6, "peak7": 3, "peakStart": "Oct 8", "users": 6, "first": "Oct 8", "last": "Nov 4", "spike": 3.3, "action": "Deflect: self-service password reset"}, {"issue": "VPN connected but file shares unreachable", "category": "Network", "count": 5, "peak7": 3, "peakStart": "Oct 20", "users": 5, "first": "Oct 12", "last": "Nov 5", "spike": 4.9, "action": "Recurring: improve KB / automate"}, {"issue": "Forgot password", "category": "Account & Access", "count": 4, "peak7": 3, "peakStart": "Oct 26", "users": 4, "first": "Oct 13", "last": "Nov 2", "spike": 6.0, "action": "Deflect: self-service password reset"}, {"issue": "Clicked a link in a suspicious email", "category": "Security", "count": 4, "peak7": 3, "peakStart": "Oct 22", "users": 4, "first": "Oct 22", "last": "Nov 2", "spike": 6.0, "action": "Recurring: improve KB / automate"}], "insights": [{"level": "action", "text": "Account & Access is 25% of incidents (40); password resets and lockouts alone are 31. Self-service password reset could deflect about 19 tickets a month."}, {"level": "action", "text": "'Account locked again this week': 13 incidents, 10 of them within 7 days from Oct 27 (10 users). Open a problem record and review changes made just before Oct 27."}, {"level": "action", "text": "'Outlook keeps prompting for password': 10 incidents, 9 of them within 7 days from Oct 15 (10 users). Open a problem record and review changes made just before Oct 15."}, {"level": "action", "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."}, {"level": "action", "text": "P2 High resolution SLA is 85.7% against a 95% target (6 of 7 met within 8 h); misses by group: Network Operations 1."}, {"level": "action", "text": "P3 Moderate resolution SLA is 84.4% against a 90% target (27 of 32 met within 24 h); misses by group: Desktop Support 4, Network Operations 1."}, {"level": "watch", "text": "First-contact resolution is 59.1% against a 70% target. Lowest: Network (31%), Hardware (44%). Add Tier 1 runbooks and KB coverage there."}, {"level": "good", "text": "4.4% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."}, {"level": "watch", "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."}, {"level": "watch", "text": "KB link rate is 53.0% (target 60%). Link the article you used on every resolution."}, {"level": "watch", "text": "CSAT averages 4.45 from 71 responses (target 4.5). Tickets that missed SLA average 3.1 versus 4.6 when SLA was met."}]}, "60": {"label": "Last 60 days", "days": 60, "start": "2026-09-08", "end": "2026-11-06", "kpis": {"tickets": 358, "incidents": 290, "requests": 68, "resolvedIncidents": 279, "sla": 91.0, "response": 95.5, "fcr": 59.1, "reopen": 3.2, "reassign": 4.1, "kb": 53.0, "csat": 4.36, "csatN": 121, "mttrMedianH": 5.98, "mttrP90H": 52.95, "mttaMedianMin": 30.42, "backlog": 14, "aged": 4, "agedPct": 28.6}, "hero": {"label": "Resolution SLA attainment", "display": "91.0%", "sub": "254 of 279 resolved incidents met their priority target", "target": "Target \u2265 90%", "targetValue": 90.0, "ok": true}, "tiles": [{"label": "Tickets", "display": "358", "sub": "290 incidents, 68 requests", "ok": null}, {"label": "First-contact resolution", "display": "59.1%", "sub": "Target \u2265 70%", "ok": false}, {"label": "Median time to resolve", "display": "6.0 h", "sub": "P90 53 h", "ok": null}, {"label": "Response SLA", "display": "95.5%", "sub": "Target \u2265 95%", "ok": true}, {"label": "Reopen rate", "display": "3.2%", "sub": "Target \u2264 5%", "ok": true}, {"label": "Reassigned 2+ times", "display": "4.1%", "sub": "Target \u2264 10%", "ok": true}, {"label": "Aged backlog", "display": "4 of 14", "sub": "Open > 14 days (28.6%); target \u2264 5%", "ok": false}, {"label": "Customer satisfaction", "display": "4.4 / 5", "sub": "121 responses; target \u2265 4.5", "ok": false}, {"label": "KB link rate", "display": "53.0%", "sub": "Target \u2265 60%", "ok": false}], "weekly": [{"week": "2026-09-14", "incidents": 30, "requests": 9, "sla": 80.0}, {"week": "2026-09-21", "incidents": 36, "requests": 10, "sla": 97.2}, {"week": "2026-09-28", "incidents": 26, "requests": 8, "sla": 92.3}, {"week": "2026-10-05", "incidents": 36, "requests": 7, "sla": 94.1}, {"week": "2026-10-12", "incidents": 35, "requests": 8, "sla": 82.4}, {"week": "2026-10-19", "incidents": 36, "requests": 7, "sla": 85.7}, {"week": "2026-10-26", "incidents": 40, "requests": 9, "sla": 97.4}, {"week": "2026-11-02", "incidents": 33, "requests": 7, "sla": 96.3}], "byCategory": [{"name": "Account & Access", "count": 77, "share": 26.6}, {"name": "Network", "count": 62, "share": 21.4}, {"name": "Hardware", "count": 41, "share": 14.1}, {"name": "Email & Collaboration", "count": 37, "share": 12.8}, {"name": "Software", "count": 27, "share": 9.3}, {"name": "Mobile Device", "count": 19, "share": 6.6}, {"name": "Security", "count": 14, "share": 4.8}, {"name": "Printing", "count": 13, "share": 4.5}], "slaByPriority": [{"priority": "P1 Critical", "n": 1, "met": 1, "attainment": 100.0, "target": 95.0, "targetH": 4, "medianH": 3.42}, {"priority": "P2 High", "n": 9, "met": 7, "attainment": 77.8, "target": 95.0, "targetH": 8, "medianH": 1.73}, {"priority": "P3 Moderate", "n": 70, "met": 64, "attainment": 91.4, "target": 90.0, "targetH": 24, "medianH": 2.99}, {"priority": "P4 Low", "n": 124, "met": 114, "attainment": 91.9, "target": 90.0, "targetH": 72, "medianH": 6.06}, {"priority": "P5 Planning", "n": 75, "met": 68, "attainment": 90.7, "target": 90.0, "targetH": 120, "medianH": 11.02}], "aging": [{"bucket": "0-2 days", "count": 8}, {"bucket": "3-7 days", "count": 1}, {"bucket": "8-14 days", "count": 1}, {"bucket": "Over 14 days", "count": 4}], "channels": [{"name": "Phone", "slot": 0, "count": 102}, {"name": "Self-service portal", "slot": 1, "count": 102}, {"name": "Email", "slot": 2, "count": 79}, {"name": "Chat", "slot": 3, "count": 28}, {"name": "Walk-up", "slot": 4, "count": 29}, {"name": "Monitoring", "slot": 5, "count": 18}], "platforms": [{"name": "Windows", "slot": 0, "count": 242}, {"name": "macOS", "slot": 1, "count": 26}, {"name": "iOS", "slot": 2, "count": 15}, {"name": "Android", "slot": 3, "count": 6}, {"name": "Infrastructure", "slot": 4, "count": 1}], "groups": [{"name": "Contoso Service Desk", "count": 168, "resolved": 165, "medianH": 2.14, "sla": 99.4, "reassign": 0.0}, {"name": "Contoso Desktop Support", "count": 61, "resolved": 56, "medianH": 15.53, "sla": 85.7, "reassign": 13.1}, {"name": "Contoso Network Operations", "count": 40, "resolved": 37, "medianH": 31.01, "sla": 62.2, "reassign": 5.0}, {"name": "Contoso Identity & Access", "count": 21, "resolved": 21, "medianH": 23.53, "sla": 90.5, "reassign": 9.5}], "recurring": [{"issue": "Account locked again this week", "category": "Account & Access", "count": 18, "peak7": 10, "peakStart": "Oct 27", "users": 13, "first": "Sep 16", "last": "Nov 6", "spike": 9.5, "action": "Problem candidate: open a PRB"}, {"issue": "Outlook keeps prompting for password", "category": "Email & Collaboration", "count": 14, "peak7": 9, "peakStart": "Oct 15", "users": 13, "first": "Sep 8", "last": "Oct 27", "spike": 13.6, "action": "Problem candidate: open a PRB"}, {"issue": "VPN disconnects every 30 minutes", "category": "Network", "count": 15, "peak7": 8, "peakStart": "Oct 12", "users": 14, "first": "Oct 12", "last": "Oct 23", "spike": 8.7, "action": "Problem candidate: open a PRB"}, {"issue": "No network - 169.254 address", "category": "Network", "count": 9, "peak7": 7, "peakStart": "Nov 5", "users": 7, "first": "Oct 9", "last": "Nov 5", "spike": 14.0, "action": "Problem candidate: open a PRB"}, {"issue": "Password expired while travelling", "category": "Account & Access", "count": 13, "peak7": 4, "peakStart": "Sep 21", "users": 13, "first": "Sep 21", "last": "Nov 4", "spike": 3.4, "action": "Deflect: self-service password reset"}, {"issue": "Wi-Fi drops in conference room 4B", "category": "Network", "count": 10, "peak7": 4, "peakStart": "Oct 23", "users": 9, "first": "Sep 10", "last": "Oct 26", "spike": 5.0, "action": "Recurring: improve KB / automate"}, {"issue": "Keyboard keys not responding", "category": "Hardware", "count": 7, "peak7": 4, "peakStart": "Sep 29", "users": 7, "first": "Sep 14", "last": "Oct 29", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Print jobs stuck in queue", "category": "Printing", "count": 5, "peak7": 4, "peakStart": "Oct 20", "users": 4, "first": "Sep 22", "last": "Oct 23", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Forgot password", "category": "Account & Access", "count": 11, "peak7": 3, "peakStart": "Sep 14", "users": 10, "first": "Sep 14", "last": "Nov 2", "spike": 2.8, "action": "Deflect: self-service password reset"}, {"issue": "Password not accepted at sign-in", "category": "Account & Access", "count": 10, "peak7": 3, "peakStart": "Oct 4", "users": 9, "first": "Sep 9", "last": "Oct 27", "spike": 3.2, "action": "Deflect: self-service password reset"}], "insights": [{"level": "action", "text": "Account & Access is 27% of incidents (77); password resets and lockouts alone are 64. Self-service password reset could deflect about 19 tickets a month."}, {"level": "action", "text": "'Account locked again this week': 18 incidents, 10 of them within 7 days from Oct 27 (13 users). Open a problem record and review changes made just before Oct 27."}, {"level": "action", "text": "'Outlook keeps prompting for password': 14 incidents, 9 of them within 7 days from Oct 15 (13 users). Open a problem record and review changes made just before Oct 15."}, {"level": "action", "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."}, {"level": "action", "text": "P2 High resolution SLA is 77.8% against a 95% target (7 of 9 met within 8 h); misses by group: Service Desk 1, Network Operations 1."}, {"level": "watch", "text": "First-contact resolution is 59.1% against a 70% target. Lowest: Hardware (28%), Network (37%). Add Tier 1 runbooks and KB coverage there."}, {"level": "good", "text": "4.1% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."}, {"level": "watch", "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."}, {"level": "watch", "text": "KB link rate is 53.0% (target 60%). Link the article you used on every resolution."}, {"level": "watch", "text": "CSAT averages 4.36 from 121 responses (target 4.5). Tickets that missed SLA average 3.2 versus 4.5 when SLA was met."}]}, "90": {"label": "Last 90 days", "days": 90, "start": "2026-08-09", "end": "2026-11-06", "kpis": {"tickets": 504, "incidents": 394, "requests": 110, "resolvedIncidents": 383, "sla": 92.2, "response": 95.7, "fcr": 61.4, "reopen": 2.6, "reassign": 3.6, "kb": 53.8, "csat": 4.38, "csatN": 169, "mttrMedianH": 4.81, "mttrP90H": 51.43, "mttaMedianMin": 21.81, "backlog": 14, "aged": 4, "agedPct": 28.6}, "hero": {"label": "Resolution SLA attainment", "display": "92.2%", "sub": "353 of 383 resolved incidents met their priority target", "target": "Target \u2265 90%", "targetValue": 90.0, "ok": true}, "tiles": [{"label": "Tickets", "display": "504", "sub": "394 incidents, 110 requests", "ok": null}, {"label": "First-contact resolution", "display": "61.4%", "sub": "Target \u2265 70%", "ok": false}, {"label": "Median time to resolve", "display": "4.8 h", "sub": "P90 51 h", "ok": null}, {"label": "Response SLA", "display": "95.7%", "sub": "Target \u2265 95%", "ok": true}, {"label": "Reopen rate", "display": "2.6%", "sub": "Target \u2264 5%", "ok": true}, {"label": "Reassigned 2+ times", "display": "3.6%", "sub": "Target \u2264 10%", "ok": true}, {"label": "Aged backlog", "display": "4 of 14", "sub": "Open > 14 days (28.6%); target \u2264 5%", "ok": false}, {"label": "Customer satisfaction", "display": "4.4 / 5", "sub": "169 responses; target \u2265 4.5", "ok": false}, {"label": "KB link rate", "display": "53.8%", "sub": "Target \u2265 60%", "ok": false}], "weekly": [{"week": "2026-08-10", "incidents": 18, "requests": 6, "sla": 88.9}, {"week": "2026-08-17", "incidents": 31, "requests": 9, "sla": 96.8}, {"week": "2026-08-24", "incidents": 24, "requests": 14, "sla": 95.8}, {"week": "2026-08-31", "incidents": 29, "requests": 10, "sla": 96.6}, {"week": "2026-09-07", "incidents": 20, "requests": 6, "sla": 95.0}, {"week": "2026-09-14", "incidents": 30, "requests": 9, "sla": 80.0}, {"week": "2026-09-21", "incidents": 36, "requests": 10, "sla": 97.2}, {"week": "2026-09-28", "incidents": 26, "requests": 8, "sla": 92.3}, {"week": "2026-10-05", "incidents": 36, "requests": 7, "sla": 94.1}, {"week": "2026-10-12", "incidents": 35, "requests": 8, "sla": 82.4}, {"week": "2026-10-19", "incidents": 36, "requests": 7, "sla": 85.7}, {"week": "2026-10-26", "incidents": 40, "requests": 9, "sla": 97.4}, {"week": "2026-11-02", "incidents": 33, "requests": 7, "sla": 96.3}], "byCategory": [{"name": "Account & Access", "count": 106, "share": 26.9}, {"name": "Network", "count": 73, "share": 18.5}, {"name": "Hardware", "count": 58, "share": 14.7}, {"name": "Software", "count": 48, "share": 12.2}, {"name": "Email & Collaboration", "count": 48, "share": 12.2}, {"name": "Mobile Device", "count": 22, "share": 5.6}, {"name": "Security", "count": 20, "share": 5.1}, {"name": "Printing", "count": 19, "share": 4.8}], "slaByPriority": [{"priority": "P1 Critical", "n": 1, "met": 1, "attainment": 100.0, "target": 95.0, "targetH": 4, "medianH": 3.42}, {"priority": "P2 High", "n": 14, "met": 10, "attainment": 71.4, "target": 95.0, "targetH": 8, "medianH": 3.29}, {"priority": "P3 Moderate", "n": 101, "met": 93, "attainment": 92.1, "target": 90.0, "targetH": 24, "medianH": 2.68}, {"priority": "P4 Low", "n": 170, "met": 159, "attainment": 93.5, "target": 90.0, "targetH": 72, "medianH": 4.96}, {"priority": "P5 Planning", "n": 97, "met": 90, "attainment": 92.8, "target": 90.0, "targetH": 120, "medianH": 9.85}], "aging": [{"bucket": "0-2 days", "count": 8}, {"bucket": "3-7 days", "count": 1}, {"bucket": "8-14 days", "count": 1}, {"bucket": "Over 14 days", "count": 4}], "channels": [{"name": "Phone", "slot": 0, "count": 158}, {"name": "Self-service portal", "slot": 1, "count": 146}, {"name": "Email", "slot": 2, "count": 101}, {"name": "Chat", "slot": 3, "count": 38}, {"name": "Walk-up", "slot": 4, "count": 41}, {"name": "Monitoring", "slot": 5, "count": 20}], "platforms": [{"name": "Windows", "slot": 0, "count": 326}, {"name": "macOS", "slot": 1, "count": 40}, {"name": "iOS", "slot": 2, "count": 19}, {"name": "Android", "slot": 3, "count": 8}, {"name": "Infrastructure", "slot": 4, "count": 1}], "groups": [{"name": "Contoso Service Desk", "count": 238, "resolved": 235, "medianH": 1.7, "sla": 99.6, "reassign": 0.0}, {"name": "Contoso Desktop Support", "count": 84, "resolved": 79, "medianH": 15.03, "sla": 87.3, "reassign": 10.7}, {"name": "Contoso Network Operations", "count": 43, "resolved": 40, "medianH": 38.6, "sla": 65.0, "reassign": 7.0}, {"name": "Contoso Identity & Access", "count": 29, "resolved": 29, "medianH": 23.43, "sla": 82.8, "reassign": 6.9}], "recurring": [{"issue": "Account locked again this week", "category": "Account & Access", "count": 24, "peak7": 10, "peakStart": "Oct 27", "users": 18, "first": "Aug 11", "last": "Nov 6", "spike": 8.5, "action": "Problem candidate: open a PRB"}, {"issue": "Outlook keeps prompting for password", "category": "Email & Collaboration", "count": 18, "peak7": 9, "peakStart": "Oct 15", "users": 16, "first": "Aug 19", "last": "Oct 27", "spike": 11.9, "action": "Problem candidate: open a PRB"}, {"issue": "VPN disconnects every 30 minutes", "category": "Network", "count": 15, "peak7": 8, "peakStart": "Oct 12", "users": 14, "first": "Oct 12", "last": "Oct 23", "spike": 13.6, "action": "Problem candidate: open a PRB"}, {"issue": "No network - 169.254 address", "category": "Network", "count": 9, "peak7": 7, "peakStart": "Nov 5", "users": 7, "first": "Oct 9", "last": "Nov 5", "spike": 14.0, "action": "Problem candidate: open a PRB"}, {"issue": "Password expired while travelling", "category": "Account & Access", "count": 17, "peak7": 4, "peakStart": "Sep 21", "users": 16, "first": "Aug 17", "last": "Nov 4", "spike": 3.6, "action": "Deflect: self-service password reset"}, {"issue": "Wi-Fi drops in conference room 4B", "category": "Network", "count": 13, "peak7": 4, "peakStart": "Oct 23", "users": 11, "first": "Aug 12", "last": "Oct 26", "spike": 5.3, "action": "Recurring: improve KB / automate"}, {"issue": "Word add-in missing", "category": "Software", "count": 10, "peak7": 4, "peakStart": "Aug 25", "users": 9, "first": "Aug 10", "last": "Nov 5", "spike": 7.9, "action": "Recurring: improve KB / automate"}, {"issue": "Print jobs stuck in queue", "category": "Printing", "count": 9, "peak7": 4, "peakStart": "Oct 20", "users": 8, "first": "Aug 11", "last": "Oct 23", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Keyboard keys not responding", "category": "Hardware", "count": 9, "peak7": 4, "peakStart": "Sep 29", "users": 9, "first": "Aug 17", "last": "Oct 29", "spike": 8.0, "action": "Recurring: improve KB / automate"}, {"issue": "Password not accepted at sign-in", "category": "Account & Access", "count": 15, "peak7": 3, "peakStart": "Aug 19", "users": 14, "first": "Aug 19", "last": "Oct 27", "spike": 3.0, "action": "Deflect: self-service password reset"}], "insights": [{"level": "action", "text": "Account & Access is 27% of incidents (106); password resets and lockouts alone are 85. Self-service password reset could deflect about 17 tickets a month."}, {"level": "action", "text": "'Account locked again this week': 24 incidents, 10 of them within 7 days from Oct 27 (18 users). Open a problem record and review changes made just before Oct 27."}, {"level": "action", "text": "'Outlook keeps prompting for password': 18 incidents, 9 of them within 7 days from Oct 15 (16 users). Open a problem record and review changes made just before Oct 15."}, {"level": "action", "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."}, {"level": "action", "text": "P2 High resolution SLA is 71.4% against a 95% target (10 of 14 met within 8 h); misses by group: Identity & Access 1, Desktop Support 1, Service Desk 1."}, {"level": "watch", "text": "First-contact resolution is 61.4% against a 70% target. Lowest: Hardware (30%), Network (43%). Add Tier 1 runbooks and KB coverage there."}, {"level": "good", "text": "3.6% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."}, {"level": "watch", "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."}, {"level": "watch", "text": "KB link rate is 53.8% (target 60%). Link the article you used on every resolution."}, {"level": "watch", "text": "CSAT averages 4.38 from 169 responses (target 4.5). Tickets that missed SLA average 3.3 versus 4.5 when SLA was met."}]}}}</script>
+<script>
+(function () {
+  'use strict';
+  var DATA = JSON.parse(document.getElementById('dashboard-data').textContent);
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var SERIES = ['--series-1', '--series-2', '--series-3', '--series-4', '--series-5', '--series-6'];
+  var ON_FILL = ['--on-fill', '--on-fill', '--on-fill', '--on-fill-4', '--on-fill', '--on-fill'];
+  var nf0 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  function byId(id) { return document.getElementById(id); }
+  function pct(v) { return v === null || v === undefined ? 'n/a' : nf1.format(v) + '%'; }
+  function hrs(v) { return v === null || v === undefined ? 'n/a' : (v < 10 ? nf1.format(v) : nf0.format(v)) + ' h'; }
+  function svgEl(tag, attrs, parent) {
+    var n = document.createElementNS(SVGNS, tag);
+    if (attrs) { Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); }); }
+    if (parent) { parent.appendChild(n); }
+    return n;
+  }
+  function htmlEl(tag, cls, text, parent) {
+    var n = document.createElement(tag);
+    if (cls) { n.className = cls; }
+    if (text !== undefined && text !== null) { n.textContent = text; }
+    if (parent) { parent.appendChild(n); }
+    return n;
+  }
+  function svgText(parent, x, y, text, cls, anchor) {
+    var t = svgEl('text', { x: x, y: y, 'class': cls }, parent);
+    if (anchor) { t.setAttribute('text-anchor', anchor); }
+    t.textContent = text;
+    return t;
+  }
+  var ctx = document.createElement('canvas').getContext('2d');
+  function textWidth(t, size, weight) {
+    ctx.font = (weight || 400) + ' ' + (size || 12) + 'px system-ui, -apple-system, "Segoe UI", sans-serif';
+    return ctx.measureText(String(t)).width;
+  }
+  function weekLabel(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  function niceScale(max, count) {
+    count = count || 4;
+    if (!(max > 0)) { return { top: 4, step: 1 }; }
+    var raw = max / count, mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
+    var step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+    step = Math.max(1, Math.round(step));
+    return { top: Math.ceil(max / step) * step, step: step };
+  }
+
+  /* ---------- tooltip ---------- */
+  var tip = byId('tooltip');
+  function tipShow(t, x, y) {
+    tip.replaceChildren();
+    if (t.title) { htmlEl('div', 'tt-title', t.title, tip); }
+    t.rows.forEach(function (r) {
+      var row = htmlEl('div', 'tt-row', null, tip);
+      if (r.color) { var k = htmlEl('span', 'tt-key ' + (r.key || 'rect'), null, row); k.style.background = 'var(' + r.color + ')'; }
+      htmlEl('span', 'tt-value', r.value, row);
+      if (r.label) { htmlEl('span', 'tt-label', r.label, row); }
+    });
+    tip.hidden = false;
+    var pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = x + pad, top = y + pad;
+    if (left + w > window.innerWidth - 8) { left = x - w - pad; }
+    if (top + h > window.innerHeight - 8) { top = y - h - pad; }
+    tip.style.left = Math.max(8, left) + 'px';
+    tip.style.top = Math.max(8, top) + 'px';
+  }
+  function tipHide() { tip.hidden = true; }
+  function bindMark(node, getTip) {
+    node.setAttribute('tabindex', '0');
+    node.addEventListener('pointermove', function (e) { tipShow(getTip(), e.clientX, e.clientY); });
+    node.addEventListener('pointerleave', tipHide);
+    node.addEventListener('focus', function () { var b = node.getBoundingClientRect(); tipShow(getTip(), b.left + b.width / 2, b.top); });
+    node.addEventListener('blur', tipHide);
+  }
+
+  /* ---------- chart primitives ---------- */
+  function hBarPath(x0, y, x1, h) {
+    var w = x1 - x0; if (w <= 0.5) { return ''; }
+    var r = Math.min(4, w, h / 2);
+    return 'M' + x0 + ',' + y + 'H' + (x1 - r) + 'Q' + x1 + ',' + y + ' ' + x1 + ',' + (y + r) + 'V' + (y + h - r) +
+      'Q' + x1 + ',' + (y + h) + ' ' + (x1 - r) + ',' + (y + h) + 'H' + x0 + 'Z';
+  }
+  function colPath(x, yTop, w, yBase) {
+    var h = yBase - yTop; if (h <= 0.5) { return ''; }
+    var r = Math.min(4, h, w / 2);
+    return 'M' + x + ',' + yBase + 'V' + (yTop + r) + 'Q' + x + ',' + yTop + ' ' + (x + r) + ',' + yTop + 'H' + (x + w - r) +
+      'Q' + (x + w) + ',' + yTop + ' ' + (x + w) + ',' + (yTop + r) + 'V' + yBase + 'Z';
+  }
+
+  function lineChart(host, rows, series) {
+    host.replaceChildren();
+    if (!rows.length) { htmlEl('p', 'card-sub', 'No complete weeks in this range.', host); return; }
+    var W = Math.max(280, host.clientWidth), H = 250;
+    var labelW = Math.max.apply(null, series.map(function (s) { return textWidth(s.label, 12); })) + 16;
+    var m = { t: 12, r: labelW + 6, b: 28, l: 36 };
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var max = 1;
+    rows.forEach(function (r) { series.forEach(function (s) { max = Math.max(max, r[s.key]); }); });
+    var sc = niceScale(max);
+    function xs(i) { return m.l + (rows.length <= 1 ? iw / 2 : (i * iw) / (rows.length - 1)); }
+    function ys(v) { return m.t + ih - (v / sc.top) * ih; }
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': series.map(function (s) { return s.label; }).join(' and ') + ' per week over ' + rows.length + ' weeks' }, host);
+    for (var v = 0; v <= sc.top + 1e-9; v += sc.step) {
+      svgEl('line', { x1: m.l, x2: m.l + iw, y1: ys(v), y2: ys(v), 'class': v === 0 ? 'axis' : 'gridline' }, svg);
+      svgText(svg, m.l - 8, ys(v) + 4, nf0.format(v), 'tick', 'end');
+    }
+    var every = Math.max(1, Math.ceil((rows.length * 50) / iw));
+    rows.forEach(function (r, i) { if ((rows.length - 1 - i) % every === 0) { svgText(svg, xs(i), H - 8, weekLabel(r.week), 'tick', 'middle'); } });
+    series.forEach(function (s) {
+      var d = rows.map(function (r, i) { return (i ? 'L' : 'M') + xs(i).toFixed(1) + ',' + ys(r[s.key]).toFixed(1); }).join('');
+      svgEl('path', { d: d, 'class': 'series-line' }, svg).style.stroke = 'var(' + s.color + ')';
+    });
+    var last = rows.length - 1;
+    var ends = series.map(function (s) { return { s: s, y: ys(rows[last][s.key]) }; });
+    var collide = false;
+    ends.forEach(function (a, i) { ends.forEach(function (b, j) { if (i < j && Math.abs(a.y - b.y) < 14) { collide = true; } }); });
+    ends.forEach(function (e) {
+      svgEl('circle', { cx: xs(last), cy: e.y, r: 4, 'class': 'dot' }, svg).style.fill = 'var(' + e.s.color + ')';
+      if (!collide) { svgText(svg, xs(last) + 10, e.y + 4, e.s.label, 'direct'); }
+    });
+    var cross = svgEl('line', { y1: m.t, y2: m.t + ih, 'class': 'crosshair', visibility: 'hidden' }, svg);
+    var hoverDots = series.map(function (s) {
+      var c = svgEl('circle', { r: 4, 'class': 'dot', visibility: 'hidden' }, svg);
+      c.style.fill = 'var(' + s.color + ')';
+      return c;
+    });
+    var overlay = svgEl('rect', { x: m.l - 6, y: m.t, width: iw + 12, height: ih, fill: 'transparent', 'class': 'overlay',
+      tabindex: '0', role: 'img', 'aria-label': 'Weekly values. Use the left and right arrow keys to move between weeks.' }, svg);
+    var idx = last;
+    function show(i, cx, cy) {
+      idx = Math.max(0, Math.min(last, i));
+      var x = xs(idx);
+      cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.setAttribute('visibility', 'visible');
+      series.forEach(function (s, si) {
+        hoverDots[si].setAttribute('cx', x); hoverDots[si].setAttribute('cy', ys(rows[idx][s.key]));
+        hoverDots[si].setAttribute('visibility', 'visible');
+      });
+      tipShow({ title: 'Week of ' + weekLabel(rows[idx].week), rows: series.map(function (s) {
+        return { key: 'line', color: s.color, value: nf0.format(rows[idx][s.key]), label: s.label };
+      }) }, cx, cy);
+    }
+    function hide() {
+      cross.setAttribute('visibility', 'hidden');
+      hoverDots.forEach(function (d) { d.setAttribute('visibility', 'hidden'); });
+      tipHide();
+    }
+    overlay.addEventListener('pointermove', function (e) {
+      var b = svg.getBoundingClientRect();
+      show(Math.round(((e.clientX - b.left - m.l) / iw) * last), e.clientX, e.clientY);
+    });
+    overlay.addEventListener('pointerleave', hide);
+    overlay.addEventListener('focus', function () { var b = svg.getBoundingClientRect(); show(idx, b.left + xs(idx), b.top + m.t + 20); });
+    overlay.addEventListener('blur', hide);
+    overlay.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') { return; }
+      e.preventDefault();
+      var next = Math.max(0, Math.min(last, idx + (e.key === 'ArrowRight' ? 1 : -1)));
+      var b = svg.getBoundingClientRect();
+      show(next, b.left + xs(next), b.top + m.t + 20);
+    });
+  }
+
+  function hBarChart(host, items, opt) {
+    host.replaceChildren();
+    if (!items.length) { htmlEl('p', 'card-sub', 'No data in this range.', host); return; }
+    opt = opt || {};
+    var W = Math.max(280, host.clientWidth);
+    var barH = 18, gap = 12, rowH = barH + gap;
+    var labelW = Math.min(W * 0.42, Math.max.apply(null, items.map(function (it) { return textWidth(it.label, 12); })) + 12);
+    var valueW = Math.max.apply(null, items.map(function (it) { return textWidth(it.display, 12, 600); })) + 12;
+    var m = { t: 2, r: valueW, b: 2, l: labelW };
+    var iw = Math.max(40, W - m.l - m.r);
+    var H = m.t + m.b + items.length * rowH;
+    var max = opt.max || Math.max.apply(null, items.map(function (it) { return it.value; })) || 1;
+    function xs(v) { return m.l + (Math.max(0, v) / max) * iw; }
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opt.aria || 'Bar chart' }, host);
+    svgEl('line', { x1: m.l, x2: m.l, y1: m.t, y2: H - m.b, 'class': 'axis' }, svg);
+    items.forEach(function (it, i) {
+      var y = m.t + i * rowH + gap / 2;
+      var g = svgEl('g', { 'class': 'mark', role: 'img', 'aria-label': it.aria }, svg);
+      svgEl('rect', { x: 0, y: y - gap / 2, width: W, height: rowH, fill: 'transparent' }, g);
+      svgText(g, m.l - 8, y + barH / 2 + 4, it.label, 'cat', 'end');
+      var x1 = xs(it.value);
+      var path = hBarPath(m.l, y, x1, barH);
+      if (path) { svgEl('path', { d: path, 'class': 'bar' }, g).style.fill = 'var(' + (opt.color || '--series-1') + ')'; }
+      if (it.target !== undefined && it.target !== null) {
+        var tx = xs(it.target);
+        svgEl('line', { x1: tx, x2: tx, y1: y - 3, y2: y + barH + 3, 'class': 'target' }, g);
+      }
+      if (opt.valueColumn) { svgText(g, W - 2, y + barH / 2 + 4, it.display, 'val', 'end'); }
+      else { svgText(g, x1 + 6, y + barH / 2 + 4, it.display, 'val'); }
+      bindMark(g, function () { return it.tip; });
+    });
+  }
+
+  function columnChart(host, items, opt) {
+    host.replaceChildren();
+    opt = opt || {};
+    var W = Math.max(260, host.clientWidth), H = 200;
+    var m = { t: 22, r: 8, b: 28, l: 8 };
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var max = Math.max(1, Math.max.apply(null, items.map(function (it) { return it.value; })));
+    var slot = iw / items.length, bw = Math.min(24, slot * 0.5);
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opt.aria || 'Column chart' }, host);
+    var base = m.t + ih;
+    svgEl('line', { x1: m.l, x2: m.l + iw, y1: base, y2: base, 'class': 'axis' }, svg);
+    items.forEach(function (it, i) {
+      var cx = m.l + slot * i + slot / 2;
+      var yTop = base - (it.value / max) * ih;
+      var g = svgEl('g', { 'class': 'mark', role: 'img', 'aria-label': it.aria }, svg);
+      svgEl('rect', { x: cx - slot / 2 + 2, y: m.t - 20, width: slot - 4, height: ih + 20, fill: 'transparent' }, g);
+      var path = colPath(cx - bw / 2, yTop, bw, base);
+      if (path) { svgEl('path', { d: path, 'class': 'bar' }, g).style.fill = 'var(' + (opt.color || '--series-1') + ')'; }
+      svgText(g, cx, Math.min(yTop, base) - 6, it.display, 'val', 'middle');
+      svgText(g, cx, H - 8, it.label, 'tick', 'middle');
+      bindMark(g, function () { return it.tip; });
+    });
+  }
+
+  function segmentedBar(host, legendHost, items, noun) {
+    host.replaceChildren(); legendHost.replaceChildren();
+    var parts = items.filter(function (it) { return it.count > 0; });
+    var total = parts.reduce(function (a, b) { return a + b.count; }, 0);
+    if (!total) { htmlEl('p', 'card-sub', 'No data in this range.', host); return; }
+    var W = Math.max(260, host.clientWidth), H = 28, gapPx = 2;
+    var avail = W - gapPx * (parts.length - 1);
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': parts.map(function (p) { return p.name + ' ' + Math.round((100 * p.count) / total) + '%'; }).join(', ') }, host);
+    var x = 0;
+    parts.forEach(function (p) {
+      var w = (p.count / total) * avail;
+      var share = Math.round((100 * p.count) / total) + '%';
+      var g = svgEl('g', { 'class': 'mark', role: 'img', 'aria-label': p.name + ': ' + nf0.format(p.count) + ' (' + share + ')' }, svg);
+      var r = svgEl('rect', { x: x, y: 0, width: Math.max(1, w), height: H, rx: Math.min(4, w / 2), 'class': 'seg' }, g);
+      r.style.fill = 'var(' + SERIES[p.slot] + ')';
+      if (textWidth(share, 12, 600) + 14 <= w) {
+        svgText(g, x + 7, H / 2 + 4, share, 'seg-label').style.fill = 'var(' + ON_FILL[p.slot] + ')';
+      }
+      bindMark(g, function () { return { title: p.name, rows: [{ key: 'rect', color: SERIES[p.slot], value: nf0.format(p.count), label: share + ' of ' + noun }] }; });
+      x += w + gapPx;
+    });
+    parts.forEach(function (p) {
+      var li = htmlEl('span', 'lg-item', null, legendHost);
+      htmlEl('span', 'lg-swatch', null, li).style.background = 'var(' + SERIES[p.slot] + ')';
+      htmlEl('span', null, p.name, li);
+    });
+  }
+
+  function table(host, headers, rows, numeric) {
+    host.replaceChildren();
+    numeric = numeric || [];
+    var t = htmlEl('table', null, null, host);
+    var tr = htmlEl('tr', null, null, htmlEl('thead', null, null, t));
+    headers.forEach(function (hd, i) { var th = htmlEl('th', numeric.indexOf(i) >= 0 ? 'num' : null, hd, tr); th.scope = 'col'; });
+    var tb = htmlEl('tbody', null, null, t);
+    rows.forEach(function (r) {
+      var row = htmlEl('tr', null, null, tb);
+      r.forEach(function (c, i) { htmlEl('td', numeric.indexOf(i) >= 0 ? 'num' : null, c, row); });
+    });
+  }
+
+  function statusIcon(parent, kind) {
+    var svg = svgEl('svg', { width: 14, height: 14, viewBox: '0 0 14 14', 'aria-hidden': 'true' }, parent);
+    var cls = { good: 'st-good', bad: 'st-crit', action: 'st-serious', watch: 'st-warn' }[kind];
+    svgEl('circle', { cx: 7, cy: 7, r: 7, 'class': cls }, svg);
+    var dark = kind === 'watch' ? ' dark' : '';
+    if (kind === 'good') { svgEl('path', { d: 'M4 7.3l2 2 4-4.5', 'class': 'st-glyph' }, svg); }
+    else { svgEl('path', { d: 'M7 3.6v4.3', 'class': 'st-glyph' + dark }, svg); svgEl('circle', { cx: 7, cy: 10.3, r: 1, 'class': 'st-dot' + dark }, svg); }
+  }
+  function statusBadge(parent, ok) {
+    if (ok === null || ok === undefined) { return; }
+    var b = htmlEl('span', 'status', null, parent);
+    statusIcon(b, ok ? 'good' : 'bad');
+    htmlEl('span', null, ok ? 'Meets target' : 'Misses target', b);
+  }
+
+  function sparkline(host, rows, target) {
+    host.replaceChildren();
+    var pts = rows.filter(function (r) { return r.sla !== null && r.sla !== undefined; }).slice(-12);
+    if (pts.length < 2) { return; }
+    var W = Math.max(160, host.clientWidth), H = 56, m = { t: 6, r: 8, b: 6, l: 4 };
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var lo = Math.min(target, Math.min.apply(null, pts.map(function (p) { return p.sla; }))) - 5;
+    lo = Math.max(0, Math.floor(lo / 5) * 5);
+    function xs(i) { return m.l + (i * iw) / (pts.length - 1); }
+    function ys(v) { return m.t + ih - ((v - lo) / (100 - lo)) * ih; }
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': 'Weekly resolution SLA attainment for the last ' + pts.length + ' weeks' }, host);
+    svgEl('line', { x1: m.l, x2: m.l + iw, y1: ys(target), y2: ys(target), 'class': 'gridline' }, svg);
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + xs(i).toFixed(1) + ',' + ys(p.sla).toFixed(1); }).join('');
+    svgEl('path', { d: d, 'class': 'series-line spark-line' }, svg);
+    var lastI = pts.length - 1;
+    svgEl('circle', { cx: xs(lastI), cy: ys(pts[lastI].sla), r: 4, 'class': 'dot' }, svg).style.fill = 'var(--series-1)';
+    var hover = svgEl('circle', { r: 4, 'class': 'dot', visibility: 'hidden' }, svg);
+    hover.style.fill = 'var(--text-muted)';
+    var ov = svgEl('rect', { x: 0, y: 0, width: W, height: H, fill: 'transparent', 'class': 'overlay', tabindex: '0', role: 'img',
+      'aria-label': 'Weekly SLA values. Use the left and right arrow keys.' }, svg);
+    var idx = lastI;
+    function show(i, cx, cy) {
+      idx = Math.max(0, Math.min(lastI, i));
+      hover.setAttribute('cx', xs(idx)); hover.setAttribute('cy', ys(pts[idx].sla)); hover.setAttribute('visibility', 'visible');
+      tipShow({ title: 'Week of ' + weekLabel(pts[idx].week), rows: [{ key: 'line', color: '--text-muted', value: pct(pts[idx].sla), label: 'resolved within SLA' }] }, cx, cy);
+    }
+    function hide() { hover.setAttribute('visibility', 'hidden'); tipHide(); }
+    ov.addEventListener('pointermove', function (e) { var b = svg.getBoundingClientRect(); show(Math.round(((e.clientX - b.left - m.l) / iw) * lastI), e.clientX, e.clientY); });
+    ov.addEventListener('pointerleave', hide);
+    ov.addEventListener('focus', function () { var b = svg.getBoundingClientRect(); show(idx, b.left + xs(idx), b.top); });
+    ov.addEventListener('blur', hide);
+    ov.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') { return; }
+      e.preventDefault();
+      var next = Math.max(0, Math.min(lastI, idx + (e.key === 'ArrowRight' ? 1 : -1)));
+      var b = svg.getBoundingClientRect(); show(next, b.left + xs(next), b.top);
+    });
+  }
+
+  /* ---------- page ---------- */
+  var order = DATA.windowOrder, current = DATA.defaultWindow;
+  try { var saved = window.localStorage.getItem('sdm-window'); if (saved && DATA.windows[saved]) { current = saved; } } catch (e) { /* storage unavailable */ }
+
+  function renderFilters() {
+    var host = byId('filters');
+    host.replaceChildren();
+    order.forEach(function (key) {
+      var b = htmlEl('button', null, null, host);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', key === current ? 'true' : 'false');
+      var chk = svgEl('svg', { 'class': 'check', viewBox: '0 0 16 16', 'aria-hidden': 'true' }, b);
+      svgEl('path', { d: 'M3.5 8.5l3 3 6-7', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, chk);
+      htmlEl('span', null, DATA.windows[key].label, b);
+      b.addEventListener('click', function () {
+        current = key;
+        try { window.localStorage.setItem('sdm-window', key); } catch (e) { /* ignore */ }
+        renderFilters(); renderAll();
+      });
+    });
+  }
+
+  function renderStatic(w) {
+    byId('eyebrow').textContent = DATA.meta.title;
+    byId('subtitle').textContent = DATA.meta.note + ' · ' + w.start + ' to ' + w.end + ' · ' + nf0.format(DATA.meta.rows) + ' tickets in ' + DATA.meta.source;
+    byId('footnote').textContent = 'Generated ' + DATA.meta.generatedAt + ' by scripts/python/ticket_metrics.py. Hover or focus any mark for details; every chart has a table view.';
+    var hero = byId('hero'); hero.replaceChildren();
+    htmlEl('div', 'hero-label', w.hero.label, hero);
+    htmlEl('div', 'hero-value', w.hero.display, hero);
+    htmlEl('div', 'hero-sub', w.hero.sub, hero);
+    var row = htmlEl('div', 'tile-sub', w.hero.target + '  ', hero);
+    statusBadge(row, w.hero.ok);
+    var spark = htmlEl('div', 'spark', null, hero);
+    htmlEl('div', 'tile-sub', 'Weekly attainment; the hairline marks the target', spark);
+    htmlEl('div', null, null, spark).id = 'hero-spark';
+    var tiles = byId('tiles'); tiles.replaceChildren();
+    w.tiles.forEach(function (t) {
+      var c = htmlEl('div', 'tile', null, tiles);
+      htmlEl('div', 'tile-label', t.label, c);
+      htmlEl('div', 'tile-value', t.display, c);
+      htmlEl('div', 'tile-sub', t.sub, c);
+      statusBadge(c, t.ok);
+    });
+    var ins = byId('insights'); ins.replaceChildren();
+    w.insights.forEach(function (i) {
+      var li = htmlEl('li', null, null, ins);
+      var badge = htmlEl('span', 'badge', null, li);
+      statusIcon(badge, i.level === 'good' ? 'good' : i.level);
+      htmlEl('span', null, { action: 'Act', watch: 'Watch', good: 'On track' }[i.level], badge);
+      htmlEl('span', null, i.text, li);
+    });
+    byId('sub-aging').textContent = 'Open tickets by age as of ' + w.end + ' (snapshot)';
+    table(byId('tb-weekly'), ['Week of', 'Incidents', 'Requests'], w.weekly.map(function (r) { return [weekLabel(r.week), nf0.format(r.incidents), nf0.format(r.requests)]; }), [1, 2]);
+    table(byId('tb-category'), ['Category', 'Incidents', 'Share'], w.byCategory.map(function (c) { return [c.name, nf0.format(c.count), pct(c.share)]; }), [1, 2]);
+    table(byId('tb-sla'), ['Priority', 'Resolved', 'Met', 'Attainment', 'Target', 'Median', 'SLA'],
+      w.slaByPriority.map(function (s) { return [s.priority, nf0.format(s.n), nf0.format(s.met), pct(s.attainment), nf0.format(s.target) + '%', hrs(s.medianH), s.targetH + ' h']; }), [1, 2, 3, 4, 5, 6]);
+    table(byId('tb-aging'), ['Age', 'Open tickets'], w.aging.map(function (a) { return [a.bucket, nf0.format(a.count)]; }), [1]);
+    var chTotal = w.channels.reduce(function (a, b) { return a + b.count; }, 0);
+    var plTotal = w.platforms.reduce(function (a, b) { return a + b.count; }, 0);
+    table(byId('tb-mix'), ['Breakdown', 'Value', 'Tickets', 'Share'],
+      w.channels.map(function (c) { return ['Channel', c.name, nf0.format(c.count), pct(chTotal ? (100 * c.count) / chTotal : null)]; })
+        .concat(w.platforms.map(function (p) { return ['Platform (incidents)', p.name, nf0.format(p.count), pct(plTotal ? (100 * p.count) / plTotal : null)]; })), [2, 3]);
+    table(byId('tb-recurring'), ['Issue', 'Category', 'Incidents', 'Peak in 7 days', 'Users', 'Seen', 'Suggested action'],
+      w.recurring.map(function (r) { return [r.issue, r.category, nf0.format(r.count), r.peak7 + ' from ' + r.peakStart, nf0.format(r.users), r.first + ' to ' + r.last, r.action]; }), [2, 3, 4]);
+    table(byId('tb-groups'), ['Group', 'Incidents', 'Resolved', 'Median resolve', 'Resolution SLA', 'Reassigned 2+'],
+      w.groups.map(function (g) { return [g.name, nf0.format(g.count), nf0.format(g.resolved), hrs(g.medianH), pct(g.sla), pct(g.reassign)]; }), [1, 2, 3, 4, 5]);
+  }
+
+  function renderCharts(w) {
+    var series = [{ key: 'incidents', label: 'Incidents', color: '--series-1' }, { key: 'requests', label: 'Requests', color: '--series-2' }];
+    var lg = byId('lg-weekly'); lg.replaceChildren();
+    series.forEach(function (s) { var li = htmlEl('span', 'lg-item', null, lg); htmlEl('span', 'lg-line', null, li).style.background = 'var(' + s.color + ')'; htmlEl('span', null, s.label, li); });
+    lineChart(byId('ch-weekly'), w.weekly, series);
+    var incTotal = w.kpis.incidents || 1;
+    hBarChart(byId('ch-category'), w.byCategory.map(function (c) {
+      return { label: c.name, value: c.count, display: nf0.format(c.count), aria: c.name + ': ' + c.count + ' incidents',
+        tip: { title: c.name, rows: [{ key: 'rect', color: '--series-1', value: nf0.format(c.count), label: 'incidents (' + pct((100 * c.count) / incTotal) + ')' }] } };
+    }), { aria: 'Incidents by category' });
+    hBarChart(byId('ch-sla'), w.slaByPriority.map(function (s) {
+      var shown = s.n ? pct(s.attainment) : 'none';
+      return { label: s.priority, value: s.attainment || 0, target: s.n ? s.target : null, display: shown,
+        aria: s.priority + ': ' + shown + ' within ' + s.targetH + ' hours, target ' + s.target + ' percent',
+        tip: { title: s.priority + ' · target ' + s.target + '% within ' + s.targetH + ' h', rows: [
+          { key: 'rect', color: '--series-1', value: shown, label: s.met + ' of ' + s.n + ' resolved in time' },
+          { value: hrs(s.medianH), label: 'median time to resolve' }] } };
+    }), { max: 100, valueColumn: true, aria: 'Resolution SLA attainment by priority' });
+    columnChart(byId('ch-aging'), w.aging.map(function (a) {
+      return { label: a.bucket, value: a.count, display: nf0.format(a.count), aria: a.bucket + ': ' + a.count + ' open',
+        tip: { title: a.bucket, rows: [{ key: 'rect', color: '--series-1', value: nf0.format(a.count), label: 'open tickets' }] } };
+    }), { aria: 'Open backlog by age' });
+    segmentedBar(byId('ch-channel'), byId('lg-channel'), w.channels, 'tickets');
+    segmentedBar(byId('ch-platform'), byId('lg-platform'), w.platforms, 'incidents');
+    sparkline(byId('hero-spark'), w.weekly, w.hero.targetValue);
+  }
+
+  function renderAll() { var w = DATA.windows[current]; renderStatic(w); renderCharts(w); }
+
+  renderFilters();
+  renderAll();
+  var lastWidth = document.querySelector('main').clientWidth, timer = null;
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () {
+      var wNow = document.querySelector('main').clientWidth;
+      if (Math.abs(wNow - lastWidth) < 4) { return; }
+      lastWidth = wNow;
+      clearTimeout(timer);
+      timer = setTimeout(function () { renderCharts(DATA.windows[current]); }, 120);
+    }).observe(document.querySelector('main'));
+  }
+})();
+</script>
+</body>
+</html>

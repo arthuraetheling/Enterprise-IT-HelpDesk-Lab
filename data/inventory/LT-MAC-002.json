@@ -1,0 +1,18 @@
+{
+    "SchemaVersion":  1,
+    "Source":  "macos_health_check.sh",
+    "CollectedAt":  "2026-11-06T13:47:52Z",
+    "ComputerName":  "LT-MAC-002",
+    "SerialNumber":  "H4TX92KQ7P",
+    "Manufacturer":  "Apple Inc.",
+    "Model":  "MacBook Pro 14 (M3)",
+    "OS":  {
+               "Name":  "macOS",
+               "DisplayVersion":  "15.6",
+               "Build":  "24G84"
+           },
+    "MemoryGB":  18,
+    "LoggedOnUser":  "lena.vogel",
+    "MdmEnrolled":  true,
+    "FileVault":  "On"
+}

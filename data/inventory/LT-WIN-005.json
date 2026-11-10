@@ -1,0 +1,60 @@
+{
+    "SchemaVersion":  1,
+    "CollectedAt":  "2026-11-05T16:44:10Z",
+    "ComputerName":  "LT-WIN-005",
+    "Domain":  "corp.contoso.internal",
+    "DomainJoined":  true,
+    "LoggedOnUser":  "CONTOSO\\maya.singh",
+    "Manufacturer":  "LENOVO",
+    "Model":  "ThinkPad T14 Gen 4",
+    "SerialNumber":  "PF4BX2KQ",
+    "AssetTag":  "",
+    "FormFactor":  "Laptop",
+    "OS":  {
+               "Name":  "Microsoft Windows 11 Enterprise",
+               "DisplayVersion":  "25H2",
+               "Build":  "26200.7171",
+               "Architecture":  "64-bit"
+           },
+    "Cpu":  {
+                "Name":  "Intel(R) Core(TM) i7-1365U",
+                "Sockets":  1,
+                "Cores":  10,
+                "LogicalProcessors":  12
+            },
+    "MemoryGB":  16,
+    "SystemDrive":  {
+                        "SizeGB":  64,
+                        "FreeGB":  21.4
+                    },
+    "Network":  [
+                    {
+                        "Name":  "Ethernet0",
+                        "Description":  "vmxnet3 Ethernet Adapter",
+                        "MacAddress":  "8C-8D-28-4F-1A-0C",
+                        "IPv4":  "10.10.10.131",
+                        "LinkSpeed":  "10 Gbps"
+                    }
+                ],
+    "SoftwareCount":  3,
+    "Software":  [
+                     {
+                         "Name":  "Microsoft 365 Apps for enterprise - en-us",
+                         "Version":  "16.0.19127.20154",
+                         "Publisher":  "Microsoft Corporation",
+                         "InstallDate":  ""
+                     },
+                     {
+                         "Name":  "Google Chrome",
+                         "Version":  "142.0.7444.60",
+                         "Publisher":  "Google LLC",
+                         "InstallDate":  "20261021"
+                     },
+                     {
+                         "Name":  "Zabbix Agent 2 (64-bit)",
+                         "Version":  "7.0.21.2400",
+                         "Publisher":  "Zabbix SIA",
+                         "InstallDate":  "20261012"
+                     }
+                 ]
+}

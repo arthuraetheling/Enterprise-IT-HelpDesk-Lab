@@ -1,0 +1,24 @@
+# Local outputs from running the tools on real machines (may contain hostnames, serials, users)
+output/
+*-health-*.json
+*-health-*.html
+*-compliance-*.csv
+*-compliance-*.json
+inventory-private/
+
+# Secrets and local configuration
+infrastructure/zabbix/.env
+*.cred
+*.clixml
+
+# Test artefacts
+mock-db.json
+alert-state.json
+
+# Python / editors / OS
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

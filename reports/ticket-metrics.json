@@ -1,0 +1,1552 @@
+{
+  "meta": {
+    "title": "Contoso Financial - IT Service Desk",
+    "note": "Simulated data (generate_tickets.py, seed 42)",
+    "source": "tickets.csv",
+    "rows": 504,
+    "asOf": "2026-11-06",
+    "generatedAt": "2026-11-10 12:23"
+  },
+  "targets": {
+    "fcr": 70.0,
+    "sla_p1p2": 95.0,
+    "sla_other": 90.0,
+    "sla_overall": 90.0,
+    "response": 95.0,
+    "reopen": 5.0,
+    "reassign": 10.0,
+    "aged": 5.0,
+    "csat": 4.5,
+    "kb": 60.0
+  },
+  "windowOrder": [
+    "30",
+    "60",
+    "90"
+  ],
+  "defaultWindow": "90",
+  "windows": {
+    "30": {
+      "label": "Last 30 days",
+      "days": 30,
+      "start": "2026-10-08",
+      "end": "2026-11-06",
+      "kpis": {
+        "tickets": 194,
+        "incidents": 160,
+        "requests": 34,
+        "resolvedIncidents": 149,
+        "sla": 90.6,
+        "response": 94.4,
+        "fcr": 59.1,
+        "reopen": 3.4,
+        "reassign": 4.4,
+        "kb": 53.0,
+        "csat": 4.45,
+        "csatN": 71,
+        "mttrMedianH": 5.81,
+        "mttrP90H": 50.44,
+        "mttaMedianMin": 42.6,
+        "backlog": 14,
+        "aged": 4,
+        "agedPct": 28.6
+      },
+      "hero": {
+        "label": "Resolution SLA attainment",
+        "display": "90.6%",
+        "sub": "135 of 149 resolved incidents met their priority target",
+        "target": "Target \u2265 90%",
+        "targetValue": 90.0,
+        "ok": true
+      },
+      "tiles": [
+        {
+          "label": "Tickets",
+          "display": "194",
+          "sub": "160 incidents, 34 requests",
+          "ok": null
+        },
+        {
+          "label": "First-contact resolution",
+          "display": "59.1%",
+          "sub": "Target \u2265 70%",
+          "ok": false
+        },
+        {
+          "label": "Median time to resolve",
+          "display": "5.8 h",
+          "sub": "P90 50 h",
+          "ok": null
+        },
+        {
+          "label": "Response SLA",
+          "display": "94.4%",
+          "sub": "Target \u2265 95%",
+          "ok": false
+        },
+        {
+          "label": "Reopen rate",
+          "display": "3.4%",
+          "sub": "Target \u2264 5%",
+          "ok": true
+        },
+        {
+          "label": "Reassigned 2+ times",
+          "display": "4.4%",
+          "sub": "Target \u2264 10%",
+          "ok": true
+        },
+        {
+          "label": "Aged backlog",
+          "display": "4 of 14",
+          "sub": "Open > 14 days (28.6%); target \u2264 5%",
+          "ok": false
+        },
+        {
+          "label": "Customer satisfaction",
+          "display": "4.5 / 5",
+          "sub": "71 responses; target \u2265 4.5",
+          "ok": false
+        },
+        {
+          "label": "KB link rate",
+          "display": "53.0%",
+          "sub": "Target \u2265 60%",
+          "ok": false
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-10-12",
+          "incidents": 35,
+          "requests": 8,
+          "sla": 82.4
+        },
+        {
+          "week": "2026-10-19",
+          "incidents": 36,
+          "requests": 7,
+          "sla": 85.7
+        },
+        {
+          "week": "2026-10-26",
+          "incidents": 40,
+          "requests": 9,
+          "sla": 97.4
+        },
+        {
+          "week": "2026-11-02",
+          "incidents": 33,
+          "requests": 7,
+          "sla": 96.3
+        }
+      ],
+      "byCategory": [
+        {
+          "name": "Network",
+          "count": 42,
+          "share": 26.2
+        },
+        {
+          "name": "Account & Access",
+          "count": 40,
+          "share": 25.0
+        },
+        {
+          "name": "Email & Collaboration",
+          "count": 20,
+          "share": 12.5
+        },
+        {
+          "name": "Hardware",
+          "count": 19,
+          "share": 11.9
+        },
+        {
+          "name": "Software",
+          "count": 14,
+          "share": 8.8
+        },
+        {
+          "name": "Mobile Device",
+          "count": 12,
+          "share": 7.5
+        },
+        {
+          "name": "Printing",
+          "count": 7,
+          "share": 4.4
+        },
+        {
+          "name": "Security",
+          "count": 6,
+          "share": 3.8
+        }
+      ],
+      "slaByPriority": [
+        {
+          "priority": "P1 Critical",
+          "n": 1,
+          "met": 1,
+          "attainment": 100.0,
+          "target": 95.0,
+          "targetH": 4,
+          "medianH": 3.42
+        },
+        {
+          "priority": "P2 High",
+          "n": 7,
+          "met": 6,
+          "attainment": 85.7,
+          "target": 95.0,
+          "targetH": 8,
+          "medianH": 1.53
+        },
+        {
+          "priority": "P3 Moderate",
+          "n": 32,
+          "met": 27,
+          "attainment": 84.4,
+          "target": 90.0,
+          "targetH": 24,
+          "medianH": 3.26
+        },
+        {
+          "priority": "P4 Low",
+          "n": 69,
+          "met": 64,
+          "attainment": 92.8,
+          "target": 90.0,
+          "targetH": 72,
+          "medianH": 5.64
+        },
+        {
+          "priority": "P5 Planning",
+          "n": 40,
+          "met": 37,
+          "attainment": 92.5,
+          "target": 90.0,
+          "targetH": 120,
+          "medianH": 11.09
+        }
+      ],
+      "aging": [
+        {
+          "bucket": "0-2 days",
+          "count": 8
+        },
+        {
+          "bucket": "3-7 days",
+          "count": 1
+        },
+        {
+          "bucket": "8-14 days",
+          "count": 1
+        },
+        {
+          "bucket": "Over 14 days",
+          "count": 4
+        }
+      ],
+      "channels": [
+        {
+          "name": "Phone",
+          "slot": 0,
+          "count": 53
+        },
+        {
+          "name": "Self-service portal",
+          "slot": 1,
+          "count": 60
+        },
+        {
+          "name": "Email",
+          "slot": 2,
+          "count": 46
+        },
+        {
+          "name": "Chat",
+          "slot": 3,
+          "count": 11
+        },
+        {
+          "name": "Walk-up",
+          "slot": 4,
+          "count": 15
+        },
+        {
+          "name": "Monitoring",
+          "slot": 5,
+          "count": 9
+        }
+      ],
+      "platforms": [
+        {
+          "name": "Windows",
+          "slot": 0,
+          "count": 138
+        },
+        {
+          "name": "macOS",
+          "slot": 1,
+          "count": 12
+        },
+        {
+          "name": "iOS",
+          "slot": 2,
+          "count": 7
+        },
+        {
+          "name": "Android",
+          "slot": 3,
+          "count": 2
+        },
+        {
+          "name": "Infrastructure",
+          "slot": 4,
+          "count": 1
+        }
+      ],
+      "groups": [
+        {
+          "name": "Contoso Service Desk",
+          "count": 91,
+          "resolved": 88,
+          "medianH": 2.57,
+          "sla": 100.0,
+          "reassign": 0.0
+        },
+        {
+          "name": "Contoso Network Operations",
+          "count": 30,
+          "resolved": 27,
+          "medianH": 22.59,
+          "sla": 66.7,
+          "reassign": 6.7
+        },
+        {
+          "name": "Contoso Desktop Support",
+          "count": 28,
+          "resolved": 23,
+          "medianH": 17.22,
+          "sla": 78.3,
+          "reassign": 14.3
+        },
+        {
+          "name": "Contoso Identity & Access",
+          "count": 11,
+          "resolved": 11,
+          "medianH": 14.93,
+          "sla": 100.0,
+          "reassign": 9.1
+        }
+      ],
+      "recurring": [
+        {
+          "issue": "Account locked again this week",
+          "category": "Account & Access",
+          "count": 13,
+          "peak7": 10,
+          "peakStart": "Oct 27",
+          "users": 10,
+          "first": "Oct 16",
+          "last": "Nov 6",
+          "spike": 11.0,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Outlook keeps prompting for password",
+          "category": "Email & Collaboration",
+          "count": 10,
+          "peak7": 9,
+          "peakStart": "Oct 15",
+          "users": 10,
+          "first": "Oct 15",
+          "last": "Oct 27",
+          "spike": 18.0,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "VPN disconnects every 30 minutes",
+          "category": "Network",
+          "count": 15,
+          "peak7": 8,
+          "peakStart": "Oct 12",
+          "users": 14,
+          "first": "Oct 12",
+          "last": "Oct 23",
+          "spike": 3.8,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "No network - 169.254 address",
+          "category": "Network",
+          "count": 9,
+          "peak7": 7,
+          "peakStart": "Nov 5",
+          "users": 7,
+          "first": "Oct 9",
+          "last": "Nov 5",
+          "spike": 11.5,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Print jobs stuck in queue",
+          "category": "Printing",
+          "count": 4,
+          "peak7": 4,
+          "peakStart": "Oct 20",
+          "users": 4,
+          "first": "Oct 20",
+          "last": "Oct 23",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Wi-Fi drops in conference room 4B",
+          "category": "Network",
+          "count": 4,
+          "peak7": 4,
+          "peakStart": "Oct 23",
+          "users": 4,
+          "first": "Oct 23",
+          "last": "Oct 26",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Password expired while travelling",
+          "category": "Account & Access",
+          "count": 6,
+          "peak7": 3,
+          "peakStart": "Oct 8",
+          "users": 6,
+          "first": "Oct 8",
+          "last": "Nov 4",
+          "spike": 3.3,
+          "action": "Deflect: self-service password reset"
+        },
+        {
+          "issue": "VPN connected but file shares unreachable",
+          "category": "Network",
+          "count": 5,
+          "peak7": 3,
+          "peakStart": "Oct 20",
+          "users": 5,
+          "first": "Oct 12",
+          "last": "Nov 5",
+          "spike": 4.9,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Forgot password",
+          "category": "Account & Access",
+          "count": 4,
+          "peak7": 3,
+          "peakStart": "Oct 26",
+          "users": 4,
+          "first": "Oct 13",
+          "last": "Nov 2",
+          "spike": 6.0,
+          "action": "Deflect: self-service password reset"
+        },
+        {
+          "issue": "Clicked a link in a suspicious email",
+          "category": "Security",
+          "count": 4,
+          "peak7": 3,
+          "peakStart": "Oct 22",
+          "users": 4,
+          "first": "Oct 22",
+          "last": "Nov 2",
+          "spike": 6.0,
+          "action": "Recurring: improve KB / automate"
+        }
+      ],
+      "insights": [
+        {
+          "level": "action",
+          "text": "Account & Access is 25% of incidents (40); password resets and lockouts alone are 31. Self-service password reset could deflect about 19 tickets a month."
+        },
+        {
+          "level": "action",
+          "text": "'Account locked again this week': 13 incidents, 10 of them within 7 days from Oct 27 (10 users). Open a problem record and review changes made just before Oct 27."
+        },
+        {
+          "level": "action",
+          "text": "'Outlook keeps prompting for password': 10 incidents, 9 of them within 7 days from Oct 15 (10 users). Open a problem record and review changes made just before Oct 15."
+        },
+        {
+          "level": "action",
+          "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."
+        },
+        {
+          "level": "action",
+          "text": "P2 High resolution SLA is 85.7% against a 95% target (6 of 7 met within 8 h); misses by group: Network Operations 1."
+        },
+        {
+          "level": "action",
+          "text": "P3 Moderate resolution SLA is 84.4% against a 90% target (27 of 32 met within 24 h); misses by group: Desktop Support 4, Network Operations 1."
+        },
+        {
+          "level": "watch",
+          "text": "First-contact resolution is 59.1% against a 70% target. Lowest: Network (31%), Hardware (44%). Add Tier 1 runbooks and KB coverage there."
+        },
+        {
+          "level": "good",
+          "text": "4.4% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."
+        },
+        {
+          "level": "watch",
+          "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."
+        },
+        {
+          "level": "watch",
+          "text": "KB link rate is 53.0% (target 60%). Link the article you used on every resolution."
+        },
+        {
+          "level": "watch",
+          "text": "CSAT averages 4.45 from 71 responses (target 4.5). Tickets that missed SLA average 3.1 versus 4.6 when SLA was met."
+        }
+      ]
+    },
+    "60": {
+      "label": "Last 60 days",
+      "days": 60,
+      "start": "2026-09-08",
+      "end": "2026-11-06",
+      "kpis": {
+        "tickets": 358,
+        "incidents": 290,
+        "requests": 68,
+        "resolvedIncidents": 279,
+        "sla": 91.0,
+        "response": 95.5,
+        "fcr": 59.1,
+        "reopen": 3.2,
+        "reassign": 4.1,
+        "kb": 53.0,
+        "csat": 4.36,
+        "csatN": 121,
+        "mttrMedianH": 5.98,
+        "mttrP90H": 52.95,
+        "mttaMedianMin": 30.42,
+        "backlog": 14,
+        "aged": 4,
+        "agedPct": 28.6
+      },
+      "hero": {
+        "label": "Resolution SLA attainment",
+        "display": "91.0%",
+        "sub": "254 of 279 resolved incidents met their priority target",
+        "target": "Target \u2265 90%",
+        "targetValue": 90.0,
+        "ok": true
+      },
+      "tiles": [
+        {
+          "label": "Tickets",
+          "display": "358",
+          "sub": "290 incidents, 68 requests",
+          "ok": null
+        },
+        {
+          "label": "First-contact resolution",
+          "display": "59.1%",
+          "sub": "Target \u2265 70%",
+          "ok": false
+        },
+        {
+          "label": "Median time to resolve",
+          "display": "6.0 h",
+          "sub": "P90 53 h",
+          "ok": null
+        },
+        {
+          "label": "Response SLA",
+          "display": "95.5%",
+          "sub": "Target \u2265 95%",
+          "ok": true
+        },
+        {
+          "label": "Reopen rate",
+          "display": "3.2%",
+          "sub": "Target \u2264 5%",
+          "ok": true
+        },
+        {
+          "label": "Reassigned 2+ times",
+          "display": "4.1%",
+          "sub": "Target \u2264 10%",
+          "ok": true
+        },
+        {
+          "label": "Aged backlog",
+          "display": "4 of 14",
+          "sub": "Open > 14 days (28.6%); target \u2264 5%",
+          "ok": false
+        },
+        {
+          "label": "Customer satisfaction",
+          "display": "4.4 / 5",
+          "sub": "121 responses; target \u2265 4.5",
+          "ok": false
+        },
+        {
+          "label": "KB link rate",
+          "display": "53.0%",
+          "sub": "Target \u2265 60%",
+          "ok": false
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-09-14",
+          "incidents": 30,
+          "requests": 9,
+          "sla": 80.0
+        },
+        {
+          "week": "2026-09-21",
+          "incidents": 36,
+          "requests": 10,
+          "sla": 97.2
+        },
+        {
+          "week": "2026-09-28",
+          "incidents": 26,
+          "requests": 8,
+          "sla": 92.3
+        },
+        {
+          "week": "2026-10-05",
+          "incidents": 36,
+          "requests": 7,
+          "sla": 94.1
+        },
+        {
+          "week": "2026-10-12",
+          "incidents": 35,
+          "requests": 8,
+          "sla": 82.4
+        },
+        {
+          "week": "2026-10-19",
+          "incidents": 36,
+          "requests": 7,
+          "sla": 85.7
+        },
+        {
+          "week": "2026-10-26",
+          "incidents": 40,
+          "requests": 9,
+          "sla": 97.4
+        },
+        {
+          "week": "2026-11-02",
+          "incidents": 33,
+          "requests": 7,
+          "sla": 96.3
+        }
+      ],
+      "byCategory": [
+        {
+          "name": "Account & Access",
+          "count": 77,
+          "share": 26.6
+        },
+        {
+          "name": "Network",
+          "count": 62,
+          "share": 21.4
+        },
+        {
+          "name": "Hardware",
+          "count": 41,
+          "share": 14.1
+        },
+        {
+          "name": "Email & Collaboration",
+          "count": 37,
+          "share": 12.8
+        },
+        {
+          "name": "Software",
+          "count": 27,
+          "share": 9.3
+        },
+        {
+          "name": "Mobile Device",
+          "count": 19,
+          "share": 6.6
+        },
+        {
+          "name": "Security",
+          "count": 14,
+          "share": 4.8
+        },
+        {
+          "name": "Printing",
+          "count": 13,
+          "share": 4.5
+        }
+      ],
+      "slaByPriority": [
+        {
+          "priority": "P1 Critical",
+          "n": 1,
+          "met": 1,
+          "attainment": 100.0,
+          "target": 95.0,
+          "targetH": 4,
+          "medianH": 3.42
+        },
+        {
+          "priority": "P2 High",
+          "n": 9,
+          "met": 7,
+          "attainment": 77.8,
+          "target": 95.0,
+          "targetH": 8,
+          "medianH": 1.73
+        },
+        {
+          "priority": "P3 Moderate",
+          "n": 70,
+          "met": 64,
+          "attainment": 91.4,
+          "target": 90.0,
+          "targetH": 24,
+          "medianH": 2.99
+        },
+        {
+          "priority": "P4 Low",
+          "n": 124,
+          "met": 114,
+          "attainment": 91.9,
+          "target": 90.0,
+          "targetH": 72,
+          "medianH": 6.06
+        },
+        {
+          "priority": "P5 Planning",
+          "n": 75,
+          "met": 68,
+          "attainment": 90.7,
+          "target": 90.0,
+          "targetH": 120,
+          "medianH": 11.02
+        }
+      ],
+      "aging": [
+        {
+          "bucket": "0-2 days",
+          "count": 8
+        },
+        {
+          "bucket": "3-7 days",
+          "count": 1
+        },
+        {
+          "bucket": "8-14 days",
+          "count": 1
+        },
+        {
+          "bucket": "Over 14 days",
+          "count": 4
+        }
+      ],
+      "channels": [
+        {
+          "name": "Phone",
+          "slot": 0,
+          "count": 102
+        },
+        {
+          "name": "Self-service portal",
+          "slot": 1,
+          "count": 102
+        },
+        {
+          "name": "Email",
+          "slot": 2,
+          "count": 79
+        },
+        {
+          "name": "Chat",
+          "slot": 3,
+          "count": 28
+        },
+        {
+          "name": "Walk-up",
+          "slot": 4,
+          "count": 29
+        },
+        {
+          "name": "Monitoring",
+          "slot": 5,
+          "count": 18
+        }
+      ],
+      "platforms": [
+        {
+          "name": "Windows",
+          "slot": 0,
+          "count": 242
+        },
+        {
+          "name": "macOS",
+          "slot": 1,
+          "count": 26
+        },
+        {
+          "name": "iOS",
+          "slot": 2,
+          "count": 15
+        },
+        {
+          "name": "Android",
+          "slot": 3,
+          "count": 6
+        },
+        {
+          "name": "Infrastructure",
+          "slot": 4,
+          "count": 1
+        }
+      ],
+      "groups": [
+        {
+          "name": "Contoso Service Desk",
+          "count": 168,
+          "resolved": 165,
+          "medianH": 2.14,
+          "sla": 99.4,
+          "reassign": 0.0
+        },
+        {
+          "name": "Contoso Desktop Support",
+          "count": 61,
+          "resolved": 56,
+          "medianH": 15.53,
+          "sla": 85.7,
+          "reassign": 13.1
+        },
+        {
+          "name": "Contoso Network Operations",
+          "count": 40,
+          "resolved": 37,
+          "medianH": 31.01,
+          "sla": 62.2,
+          "reassign": 5.0
+        },
+        {
+          "name": "Contoso Identity & Access",
+          "count": 21,
+          "resolved": 21,
+          "medianH": 23.53,
+          "sla": 90.5,
+          "reassign": 9.5
+        }
+      ],
+      "recurring": [
+        {
+          "issue": "Account locked again this week",
+          "category": "Account & Access",
+          "count": 18,
+          "peak7": 10,
+          "peakStart": "Oct 27",
+          "users": 13,
+          "first": "Sep 16",
+          "last": "Nov 6",
+          "spike": 9.5,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Outlook keeps prompting for password",
+          "category": "Email & Collaboration",
+          "count": 14,
+          "peak7": 9,
+          "peakStart": "Oct 15",
+          "users": 13,
+          "first": "Sep 8",
+          "last": "Oct 27",
+          "spike": 13.6,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "VPN disconnects every 30 minutes",
+          "category": "Network",
+          "count": 15,
+          "peak7": 8,
+          "peakStart": "Oct 12",
+          "users": 14,
+          "first": "Oct 12",
+          "last": "Oct 23",
+          "spike": 8.7,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "No network - 169.254 address",
+          "category": "Network",
+          "count": 9,
+          "peak7": 7,
+          "peakStart": "Nov 5",
+          "users": 7,
+          "first": "Oct 9",
+          "last": "Nov 5",
+          "spike": 14.0,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Password expired while travelling",
+          "category": "Account & Access",
+          "count": 13,
+          "peak7": 4,
+          "peakStart": "Sep 21",
+          "users": 13,
+          "first": "Sep 21",
+          "last": "Nov 4",
+          "spike": 3.4,
+          "action": "Deflect: self-service password reset"
+        },
+        {
+          "issue": "Wi-Fi drops in conference room 4B",
+          "category": "Network",
+          "count": 10,
+          "peak7": 4,
+          "peakStart": "Oct 23",
+          "users": 9,
+          "first": "Sep 10",
+          "last": "Oct 26",
+          "spike": 5.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Keyboard keys not responding",
+          "category": "Hardware",
+          "count": 7,
+          "peak7": 4,
+          "peakStart": "Sep 29",
+          "users": 7,
+          "first": "Sep 14",
+          "last": "Oct 29",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Print jobs stuck in queue",
+          "category": "Printing",
+          "count": 5,
+          "peak7": 4,
+          "peakStart": "Oct 20",
+          "users": 4,
+          "first": "Sep 22",
+          "last": "Oct 23",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Forgot password",
+          "category": "Account & Access",
+          "count": 11,
+          "peak7": 3,
+          "peakStart": "Sep 14",
+          "users": 10,
+          "first": "Sep 14",
+          "last": "Nov 2",
+          "spike": 2.8,
+          "action": "Deflect: self-service password reset"
+        },
+        {
+          "issue": "Password not accepted at sign-in",
+          "category": "Account & Access",
+          "count": 10,
+          "peak7": 3,
+          "peakStart": "Oct 4",
+          "users": 9,
+          "first": "Sep 9",
+          "last": "Oct 27",
+          "spike": 3.2,
+          "action": "Deflect: self-service password reset"
+        }
+      ],
+      "insights": [
+        {
+          "level": "action",
+          "text": "Account & Access is 27% of incidents (77); password resets and lockouts alone are 64. Self-service password reset could deflect about 19 tickets a month."
+        },
+        {
+          "level": "action",
+          "text": "'Account locked again this week': 18 incidents, 10 of them within 7 days from Oct 27 (13 users). Open a problem record and review changes made just before Oct 27."
+        },
+        {
+          "level": "action",
+          "text": "'Outlook keeps prompting for password': 14 incidents, 9 of them within 7 days from Oct 15 (13 users). Open a problem record and review changes made just before Oct 15."
+        },
+        {
+          "level": "action",
+          "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."
+        },
+        {
+          "level": "action",
+          "text": "P2 High resolution SLA is 77.8% against a 95% target (7 of 9 met within 8 h); misses by group: Service Desk 1, Network Operations 1."
+        },
+        {
+          "level": "watch",
+          "text": "First-contact resolution is 59.1% against a 70% target. Lowest: Hardware (28%), Network (37%). Add Tier 1 runbooks and KB coverage there."
+        },
+        {
+          "level": "good",
+          "text": "4.1% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."
+        },
+        {
+          "level": "watch",
+          "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."
+        },
+        {
+          "level": "watch",
+          "text": "KB link rate is 53.0% (target 60%). Link the article you used on every resolution."
+        },
+        {
+          "level": "watch",
+          "text": "CSAT averages 4.36 from 121 responses (target 4.5). Tickets that missed SLA average 3.2 versus 4.5 when SLA was met."
+        }
+      ]
+    },
+    "90": {
+      "label": "Last 90 days",
+      "days": 90,
+      "start": "2026-08-09",
+      "end": "2026-11-06",
+      "kpis": {
+        "tickets": 504,
+        "incidents": 394,
+        "requests": 110,
+        "resolvedIncidents": 383,
+        "sla": 92.2,
+        "response": 95.7,
+        "fcr": 61.4,
+        "reopen": 2.6,
+        "reassign": 3.6,
+        "kb": 53.8,
+        "csat": 4.38,
+        "csatN": 169,
+        "mttrMedianH": 4.81,
+        "mttrP90H": 51.43,
+        "mttaMedianMin": 21.81,
+        "backlog": 14,
+        "aged": 4,
+        "agedPct": 28.6
+      },
+      "hero": {
+        "label": "Resolution SLA attainment",
+        "display": "92.2%",
+        "sub": "353 of 383 resolved incidents met their priority target",
+        "target": "Target \u2265 90%",
+        "targetValue": 90.0,
+        "ok": true
+      },
+      "tiles": [
+        {
+          "label": "Tickets",
+          "display": "504",
+          "sub": "394 incidents, 110 requests",
+          "ok": null
+        },
+        {
+          "label": "First-contact resolution",
+          "display": "61.4%",
+          "sub": "Target \u2265 70%",
+          "ok": false
+        },
+        {
+          "label": "Median time to resolve",
+          "display": "4.8 h",
+          "sub": "P90 51 h",
+          "ok": null
+        },
+        {
+          "label": "Response SLA",
+          "display": "95.7%",
+          "sub": "Target \u2265 95%",
+          "ok": true
+        },
+        {
+          "label": "Reopen rate",
+          "display": "2.6%",
+          "sub": "Target \u2264 5%",
+          "ok": true
+        },
+        {
+          "label": "Reassigned 2+ times",
+          "display": "3.6%",
+          "sub": "Target \u2264 10%",
+          "ok": true
+        },
+        {
+          "label": "Aged backlog",
+          "display": "4 of 14",
+          "sub": "Open > 14 days (28.6%); target \u2264 5%",
+          "ok": false
+        },
+        {
+          "label": "Customer satisfaction",
+          "display": "4.4 / 5",
+          "sub": "169 responses; target \u2265 4.5",
+          "ok": false
+        },
+        {
+          "label": "KB link rate",
+          "display": "53.8%",
+          "sub": "Target \u2265 60%",
+          "ok": false
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-08-10",
+          "incidents": 18,
+          "requests": 6,
+          "sla": 88.9
+        },
+        {
+          "week": "2026-08-17",
+          "incidents": 31,
+          "requests": 9,
+          "sla": 96.8
+        },
+        {
+          "week": "2026-08-24",
+          "incidents": 24,
+          "requests": 14,
+          "sla": 95.8
+        },
+        {
+          "week": "2026-08-31",
+          "incidents": 29,
+          "requests": 10,
+          "sla": 96.6
+        },
+        {
+          "week": "2026-09-07",
+          "incidents": 20,
+          "requests": 6,
+          "sla": 95.0
+        },
+        {
+          "week": "2026-09-14",
+          "incidents": 30,
+          "requests": 9,
+          "sla": 80.0
+        },
+        {
+          "week": "2026-09-21",
+          "incidents": 36,
+          "requests": 10,
+          "sla": 97.2
+        },
+        {
+          "week": "2026-09-28",
+          "incidents": 26,
+          "requests": 8,
+          "sla": 92.3
+        },
+        {
+          "week": "2026-10-05",
+          "incidents": 36,
+          "requests": 7,
+          "sla": 94.1
+        },
+        {
+          "week": "2026-10-12",
+          "incidents": 35,
+          "requests": 8,
+          "sla": 82.4
+        },
+        {
+          "week": "2026-10-19",
+          "incidents": 36,
+          "requests": 7,
+          "sla": 85.7
+        },
+        {
+          "week": "2026-10-26",
+          "incidents": 40,
+          "requests": 9,
+          "sla": 97.4
+        },
+        {
+          "week": "2026-11-02",
+          "incidents": 33,
+          "requests": 7,
+          "sla": 96.3
+        }
+      ],
+      "byCategory": [
+        {
+          "name": "Account & Access",
+          "count": 106,
+          "share": 26.9
+        },
+        {
+          "name": "Network",
+          "count": 73,
+          "share": 18.5
+        },
+        {
+          "name": "Hardware",
+          "count": 58,
+          "share": 14.7
+        },
+        {
+          "name": "Software",
+          "count": 48,
+          "share": 12.2
+        },
+        {
+          "name": "Email & Collaboration",
+          "count": 48,
+          "share": 12.2
+        },
+        {
+          "name": "Mobile Device",
+          "count": 22,
+          "share": 5.6
+        },
+        {
+          "name": "Security",
+          "count": 20,
+          "share": 5.1
+        },
+        {
+          "name": "Printing",
+          "count": 19,
+          "share": 4.8
+        }
+      ],
+      "slaByPriority": [
+        {
+          "priority": "P1 Critical",
+          "n": 1,
+          "met": 1,
+          "attainment": 100.0,
+          "target": 95.0,
+          "targetH": 4,
+          "medianH": 3.42
+        },
+        {
+          "priority": "P2 High",
+          "n": 14,
+          "met": 10,
+          "attainment": 71.4,
+          "target": 95.0,
+          "targetH": 8,
+          "medianH": 3.29
+        },
+        {
+          "priority": "P3 Moderate",
+          "n": 101,
+          "met": 93,
+          "attainment": 92.1,
+          "target": 90.0,
+          "targetH": 24,
+          "medianH": 2.68
+        },
+        {
+          "priority": "P4 Low",
+          "n": 170,
+          "met": 159,
+          "attainment": 93.5,
+          "target": 90.0,
+          "targetH": 72,
+          "medianH": 4.96
+        },
+        {
+          "priority": "P5 Planning",
+          "n": 97,
+          "met": 90,
+          "attainment": 92.8,
+          "target": 90.0,
+          "targetH": 120,
+          "medianH": 9.85
+        }
+      ],
+      "aging": [
+        {
+          "bucket": "0-2 days",
+          "count": 8
+        },
+        {
+          "bucket": "3-7 days",
+          "count": 1
+        },
+        {
+          "bucket": "8-14 days",
+          "count": 1
+        },
+        {
+          "bucket": "Over 14 days",
+          "count": 4
+        }
+      ],
+      "channels": [
+        {
+          "name": "Phone",
+          "slot": 0,
+          "count": 158
+        },
+        {
+          "name": "Self-service portal",
+          "slot": 1,
+          "count": 146
+        },
+        {
+          "name": "Email",
+          "slot": 2,
+          "count": 101
+        },
+        {
+          "name": "Chat",
+          "slot": 3,
+          "count": 38
+        },
+        {
+          "name": "Walk-up",
+          "slot": 4,
+          "count": 41
+        },
+        {
+          "name": "Monitoring",
+          "slot": 5,
+          "count": 20
+        }
+      ],
+      "platforms": [
+        {
+          "name": "Windows",
+          "slot": 0,
+          "count": 326
+        },
+        {
+          "name": "macOS",
+          "slot": 1,
+          "count": 40
+        },
+        {
+          "name": "iOS",
+          "slot": 2,
+          "count": 19
+        },
+        {
+          "name": "Android",
+          "slot": 3,
+          "count": 8
+        },
+        {
+          "name": "Infrastructure",
+          "slot": 4,
+          "count": 1
+        }
+      ],
+      "groups": [
+        {
+          "name": "Contoso Service Desk",
+          "count": 238,
+          "resolved": 235,
+          "medianH": 1.7,
+          "sla": 99.6,
+          "reassign": 0.0
+        },
+        {
+          "name": "Contoso Desktop Support",
+          "count": 84,
+          "resolved": 79,
+          "medianH": 15.03,
+          "sla": 87.3,
+          "reassign": 10.7
+        },
+        {
+          "name": "Contoso Network Operations",
+          "count": 43,
+          "resolved": 40,
+          "medianH": 38.6,
+          "sla": 65.0,
+          "reassign": 7.0
+        },
+        {
+          "name": "Contoso Identity & Access",
+          "count": 29,
+          "resolved": 29,
+          "medianH": 23.43,
+          "sla": 82.8,
+          "reassign": 6.9
+        }
+      ],
+      "recurring": [
+        {
+          "issue": "Account locked again this week",
+          "category": "Account & Access",
+          "count": 24,
+          "peak7": 10,
+          "peakStart": "Oct 27",
+          "users": 18,
+          "first": "Aug 11",
+          "last": "Nov 6",
+          "spike": 8.5,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Outlook keeps prompting for password",
+          "category": "Email & Collaboration",
+          "count": 18,
+          "peak7": 9,
+          "peakStart": "Oct 15",
+          "users": 16,
+          "first": "Aug 19",
+          "last": "Oct 27",
+          "spike": 11.9,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "VPN disconnects every 30 minutes",
+          "category": "Network",
+          "count": 15,
+          "peak7": 8,
+          "peakStart": "Oct 12",
+          "users": 14,
+          "first": "Oct 12",
+          "last": "Oct 23",
+          "spike": 13.6,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "No network - 169.254 address",
+          "category": "Network",
+          "count": 9,
+          "peak7": 7,
+          "peakStart": "Nov 5",
+          "users": 7,
+          "first": "Oct 9",
+          "last": "Nov 5",
+          "spike": 14.0,
+          "action": "Problem candidate: open a PRB"
+        },
+        {
+          "issue": "Password expired while travelling",
+          "category": "Account & Access",
+          "count": 17,
+          "peak7": 4,
+          "peakStart": "Sep 21",
+          "users": 16,
+          "first": "Aug 17",
+          "last": "Nov 4",
+          "spike": 3.6,
+          "action": "Deflect: self-service password reset"
+        },
+        {
+          "issue": "Wi-Fi drops in conference room 4B",
+          "category": "Network",
+          "count": 13,
+          "peak7": 4,
+          "peakStart": "Oct 23",
+          "users": 11,
+          "first": "Aug 12",
+          "last": "Oct 26",
+          "spike": 5.3,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Word add-in missing",
+          "category": "Software",
+          "count": 10,
+          "peak7": 4,
+          "peakStart": "Aug 25",
+          "users": 9,
+          "first": "Aug 10",
+          "last": "Nov 5",
+          "spike": 7.9,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Print jobs stuck in queue",
+          "category": "Printing",
+          "count": 9,
+          "peak7": 4,
+          "peakStart": "Oct 20",
+          "users": 8,
+          "first": "Aug 11",
+          "last": "Oct 23",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Keyboard keys not responding",
+          "category": "Hardware",
+          "count": 9,
+          "peak7": 4,
+          "peakStart": "Sep 29",
+          "users": 9,
+          "first": "Aug 17",
+          "last": "Oct 29",
+          "spike": 8.0,
+          "action": "Recurring: improve KB / automate"
+        },
+        {
+          "issue": "Password not accepted at sign-in",
+          "category": "Account & Access",
+          "count": 15,
+          "peak7": 3,
+          "peakStart": "Aug 19",
+          "users": 14,
+          "first": "Aug 19",
+          "last": "Oct 27",
+          "spike": 3.0,
+          "action": "Deflect: self-service password reset"
+        }
+      ],
+      "insights": [
+        {
+          "level": "action",
+          "text": "Account & Access is 27% of incidents (106); password resets and lockouts alone are 85. Self-service password reset could deflect about 17 tickets a month."
+        },
+        {
+          "level": "action",
+          "text": "'Account locked again this week': 24 incidents, 10 of them within 7 days from Oct 27 (18 users). Open a problem record and review changes made just before Oct 27."
+        },
+        {
+          "level": "action",
+          "text": "'Outlook keeps prompting for password': 18 incidents, 9 of them within 7 days from Oct 15 (16 users). Open a problem record and review changes made just before Oct 15."
+        },
+        {
+          "level": "action",
+          "text": "'VPN disconnects every 30 minutes': 15 incidents, 8 of them within 7 days from Oct 12 (14 users). Open a problem record and review changes made just before Oct 12."
+        },
+        {
+          "level": "action",
+          "text": "P2 High resolution SLA is 71.4% against a 95% target (10 of 14 met within 8 h); misses by group: Identity & Access 1, Desktop Support 1, Service Desk 1."
+        },
+        {
+          "level": "watch",
+          "text": "First-contact resolution is 61.4% against a 70% target. Lowest: Hardware (30%), Network (43%). Add Tier 1 runbooks and KB coverage there."
+        },
+        {
+          "level": "good",
+          "text": "3.6% of incidents were reassigned two or more times (target \u2264 10%). Routing is healthy."
+        },
+        {
+          "level": "watch",
+          "text": "4 of 14 open tickets are older than 14 days (28.6%). Review on-hold reasons and vendor ETAs weekly."
+        },
+        {
+          "level": "watch",
+          "text": "KB link rate is 53.8% (target 60%). Link the article you used on every resolution."
+        },
+        {
+          "level": "watch",
+          "text": "CSAT averages 4.38 from 169 responses (target 4.5). Tickets that missed SLA average 3.3 versus 4.5 when SLA was met."
+        }
+      ]
+    }
+  }
+}

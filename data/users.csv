@@ -1,0 +1,51 @@
+FirstName,LastName,Department,Title,Office,Phone,EmployeeId,Manager,IsManager
+Olivia,Bennett,Finance,Finance Manager,HQ-3F,x3101,CF1001,,TRUE
+Emma,Carter,Finance,Financial Analyst,HQ-3F,x3102,CF1002,olivia.bennett,FALSE
+Noah,Patel,Finance,Senior Accountant,HQ-3F,x3103,CF1003,olivia.bennett,FALSE
+Sofia,Alvarez,Finance,Accounts Payable Specialist,HQ-3F,x3104,CF1004,olivia.bennett,FALSE
+Ethan,Nguyen,Finance,Financial Analyst,HQ-3F,x3105,CF1005,olivia.bennett,FALSE
+Grace,Okafor,Finance,Payroll Specialist,HQ-3F,x3106,CF1006,olivia.bennett,FALSE
+Liam,Fischer,Finance,Treasury Analyst,HQ-3F,x3107,CF1007,olivia.bennett,FALSE
+Chloe,Martin,Finance,Accounts Receivable Specialist,HQ-3F,x3108,CF1008,olivia.bennett,FALSE
+Mateo,Rossi,Finance,Staff Accountant,HQ-3F,x3109,CF1009,olivia.bennett,FALSE
+Aisha,Rahman,Finance,Compliance Analyst,HQ-3F,x3110,CF1010,olivia.bennett,FALSE
+Hannah,Brooks,HR,HR Manager,HQ-2F,x2101,CF2001,,TRUE
+Priya,Shah,HR,HR Generalist,HQ-2F,x2102,CF2002,hannah.brooks,FALSE
+James,Walker,HR,Recruiter,HQ-2F,x2103,CF2003,hannah.brooks,FALSE
+Mei,Chen,HR,HR Coordinator,HQ-2F,x2104,CF2004,hannah.brooks,FALSE
+Samuel,Adeyemi,HR,Benefits Specialist,HQ-2F,x2105,CF2005,hannah.brooks,FALSE
+Laura,Schmidt,HR,Talent Acquisition Partner,HQ-2F,x2106,CF2006,hannah.brooks,FALSE
+Diego,Ramirez,HR,HRIS Analyst,HQ-2F,x2107,CF2007,hannah.brooks,FALSE
+Nora,Lindqvist,HR,Learning and Development Specialist,HQ-2F,x2108,CF2008,hannah.brooks,FALSE
+Kevin,O'Brien,HR,Employee Relations Specialist,HQ-2F,x2109,CF2009,hannah.brooks,FALSE
+Yuki,Tanaka,HR,Compensation Analyst,HQ-2F,x2110,CF2010,hannah.brooks,FALSE
+Lucas,Moreno,IT,IT Manager,HQ-1F,x1101,CF3001,,TRUE
+Ava,Thompson,IT,Service Desk Analyst,HQ-1F,x1102,CF3002,lucas.moreno,FALSE
+Omar,Haddad,IT,Desktop Support Technician,HQ-1F,x1103,CF3003,lucas.moreno,FALSE
+Isabella,Costa,IT,Systems Administrator,HQ-1F,x1104,CF3004,lucas.moreno,FALSE
+Ryan,Murphy,IT,Network Engineer,HQ-1F,x1105,CF3005,lucas.moreno,FALSE
+Zoe,Kowalski,IT,IT Asset Coordinator,HQ-1F,x1106,CF3006,lucas.moreno,FALSE
+Arjun,Mehta,IT,Security Analyst,HQ-1F,x1107,CF3007,lucas.moreno,FALSE
+Fatima,Benali,IT,Service Desk Analyst,HQ-1F,x1108,CF3008,lucas.moreno,FALSE
+Ben,Larsen,IT,Endpoint Engineer,HQ-1F,x1109,CF3009,lucas.moreno,FALSE
+Julia,Novak,IT,ITSM Process Analyst,HQ-1F,x1110,CF3010,lucas.moreno,FALSE
+Marcus,Reed,Sales,Sales Manager,HQ-4F,x4101,CF4001,,TRUE
+Chris,Johnson,Sales,Account Executive,HQ-4F,x4102,CF4002,marcus.reed,FALSE
+Elena,Popescu,Sales,Account Executive,HQ-4F,x4103,CF4003,marcus.reed,FALSE
+Tyler,Grant,Sales,Sales Development Representative,HQ-4F,x4104,CF4004,marcus.reed,FALSE
+Maya,Singh,Sales,Account Manager,HQ-4F,x4105,CF4005,marcus.reed,FALSE
+Jordan,Lee,Sales,Sales Operations Analyst,HQ-4F,x4106,CF4006,marcus.reed,FALSE
+Camila,Torres,Sales,Account Executive,HQ-4F,x4107,CF4007,marcus.reed,FALSE
+Victor,Petrov,Sales,Regional Sales Lead,HQ-4F,x4108,CF4008,marcus.reed,FALSE
+Hana,Suzuki,Sales,Client Success Manager,HQ-4F,x4109,CF4009,marcus.reed,FALSE
+Leo,Dubois,Sales,Sales Engineer,HQ-4F,x4110,CF4010,marcus.reed,FALSE
+Daniel,Kim,Operations,Operations Manager,HQ-5F,x5101,CF5001,,TRUE
+Rachel,Adams,Operations,Operations Analyst,HQ-5F,x5102,CF5002,daniel.kim,FALSE
+Kwame,Mensah,Operations,Facilities Coordinator,HQ-5F,x5103,CF5003,daniel.kim,FALSE
+Isla,MacLeod,Operations,Process Improvement Analyst,HQ-5F,x5104,CF5004,daniel.kim,FALSE
+Tomás,Herrera,Operations,Logistics Coordinator,HQ-5F,x5105,CF5005,daniel.kim,FALSE
+Ngozi,Eze,Operations,Procurement Specialist,HQ-5F,x5106,CF5006,daniel.kim,FALSE
+Paul,Becker,Operations,Shift Supervisor,HQ-5F,x5107,CF5007,daniel.kim,FALSE
+Lena,Vogel,Operations,Vendor Manager,HQ-5F,x5108,CF5008,daniel.kim,FALSE
+Sam,Wright,Operations,Operations Specialist,HQ-5F,x5109,CF5009,daniel.kim,FALSE
+Ines,Silva,Operations,Quality Analyst,HQ-5F,x5110,CF5010,daniel.kim,FALSE

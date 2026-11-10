@@ -1,0 +1,11 @@
+Severity,Finding,CI,Detail,Action
+High,DUPLICATE_CI,"LT-WIN-005, LT-WIN-005-OLD",2 CIs share serial PF4BX2KQ,Merge into one CI; retire the duplicate record
+High,RETIRED_ONLINE,LT-WIN-006,CMDB status 'Retired' but the device reported on 2026-11-04,"Security review: locate the device, disable its computer account, reconcile the asset record"
+High,UNREGISTERED,LT-WIN-003,"Seen by discovery (LT-WIN-003.json, VMware20,1, user ava.turner) but not in the CMDB",Create the CI (Sync-InventoryToCmdb.ps1) and confirm the device is company-owned
+Medium,BAD_SERIAL,LT-WIN-008,CMDB serial 'To be filled by O.E.M.' is missing or a placeholder,Record the real serial from the device / BIOS
+Medium,OWNER_DRIFT,LT-MAC-002,"CMDB assigned_to hana.suzuki, signed-in user lena.vogel",Confirm the owner with the manager; update assigned_to (or recover the device)
+Medium,STALE_CI,LT-WIN-004,Last discovered 2026-09-12 (> 30 days) and not in current inventory,"Locate the device (user, last logon); mark Absent or Retired after 60 days"
+Medium,STALE_CI,LT-WIN-005-OLD,Last discovered 2026-05-20 (> 30 days) and not in current inventory,"Locate the device (user, last logon); mark Absent or Retired after 60 days"
+Low,OS_DRIFT,LT-WIN-001,CMDB '23H2 (22631.4317)' vs device 'Microsoft Windows 11 Enterprise 25H2 26200.7171',Refresh the CI from discovery
+Low,RAM_DRIFT,LT-WIN-001,CMDB 8 GB vs device 4 GB,Refresh the CI from discovery
+Low,SERIAL_MISMATCH,LT-WIN-008,Device reports serial PF5KT8WD,Write the discovered serial into the CI
